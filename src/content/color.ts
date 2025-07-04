@@ -174,10 +174,13 @@ function ll(input: string): void {
 export function generateColors(
     groups: TokenGroup[],
     tokens: ColorToken[]
-): Array<{ name: string; content: string }> {
-
+): Array<{
+    name: string;
+    path: string;
+    content: string
+}> {
     const tokenMap = splitTokensByTopGroup(tokens);
-    const result: Array<{ name: string; content: string }> = [];
+    const result: Array<{ name: string; path: string; content: string }> = [];
 
     for (const [groupKey, groupTokens] of tokenMap.entries()) {
         const tree = buildTokenTree(groupTokens, groups);
@@ -186,6 +189,7 @@ export function generateColors(
         const body = generateDartFromTree(tree, [className]);
         result.push({
             name: fileName,
+            path: `./supernova/color`,
             content: `import 'package:flutter/material.dart';\n\n${body.trim()}`,
         });
     }
