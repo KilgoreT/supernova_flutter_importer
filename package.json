@@ -1,9 +1,12 @@
 {
     "name": "@KW/exporter-flutter",
     "version": "1.0.0",
+    "type": "module",
     "description": "[DESCRIPTION]",
     "main": "index.js",
     "scripts": {
+        "lint": "eslint . --ext .ts",
+        "test": "vitest",
         "dev": "npx webpack --mode=development --watch",
         "build": "npx webpack --mode=production"
     },
@@ -14,11 +17,18 @@
         "@supernovaio/sdk-exporters": "^2.0.32"
     },
     "devDependencies": {
+        "@eslint/js": "^9.30.1",
         "@types/node": "^24.0.8",
+        "@typescript-eslint/eslint-plugin": "^8.35.1",
+        "@typescript-eslint/parser": "^8.35.1",
+        "eslint": "^9.30.1",
+        "eslint-plugin-import": "^2.32.0",
         "prettier": "3.0.3",
         "terser-webpack-plugin": "5.3.9",
         "ts-loader": "^7.0.5",
-        "typescript": "^5.2.2",
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.35.1",
+        "vitest": "^3.2.4",
         "webpack": "5.88.2",
         "webpack-cli": "^5.1.4"
     }

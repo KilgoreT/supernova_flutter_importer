@@ -1,46 +1,11 @@
-import { ColorToken, TokenGroup, TokenType } from "@supernovaio/sdk-exporters";
-
-/**
- * Приводит имя токена к допустимому формату.
- * @param name Имя токена, которое нужно привести к допустимому формату.
- *
- * Функция очищает имя токена, заменяя недопустимые символы на подчеркивания,
- * удаляя начальные цифры и добавляя суффикс, если имя совпадает с ключевым словом Dart.
- * 
- * @returns Приведенное к допустимому формату имя токена.
- */
-function sanitizeIdentifier(name: string): string {
-    const dartKeywords = new Set([
-        "abstract", "else", "import", "super", "as", "enum", "in", "switch", "assert",
-        "export", "interface", "sync", "async", "extends", "is", "this", "await",
-        "extension", "late", "throw", "break", "external", "library", "true", "case",
-        "factory", "mixin", "try", "catch", "false", "new", "typedef", "class", "final",
-        "null", "var", "const", "finally", "on", "void", "continue", "for", "operator",
-        "while", "covariant", "Function", "part", "with", "default", "get", "required",
-        "yield", "deferred", "hide", "rethrow", "do", "if", "return", "dynamic",
-        "implements", "set"
-    ]);
-
-
-    let clean = name
-        .replace(/&(\w)?/g, (_, next) => 'And' + (next ? next.toUpperCase() : ''))
-        .replace(/[^a-zA-Z0-9]/g, '_');
-    if (/^\d+$/.test(clean)) {
-        clean = 'lvl' + clean;
-    }
-    if (dartKeywords.has(clean)) {
-        clean = clean + 'Token';
-    }
-    return clean;
-}
-
-function toPascalCase(name: string): string {
-    return name
-        .split(/[_\-\s]/)
-        .filter(Boolean)
-        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-        .join('');
-}
+import { ColorToken, TokenGroup } from "@supernovaio/sdk-exporters";
+import { splitTokensByTopGroup } from '../core/split';
+import {
+    sanitizeIdentifier,
+    toPascalCase,
+    capitalizeFirstLetter,
+    toFileName
+} from './index';
 
 type TreeNode = {
     children: Map<string, TreeNode>;
@@ -60,11 +25,12 @@ function toDartColor(token: ColorToken): string | null {
     return `Color(0x${reordered.toUpperCase()})`;
 }
 
-function buildTokenTree(tokens: ColorToken[], tokenGroups: TokenGroup[]): TreeNode {
+// , tokenGroups: TokenGroup[]
+function buildTokenTree(tokens: ColorToken[]): TreeNode {
     const root: TreeNode = { children: new Map() };
 
     for (const token of tokens) {
-        console.log(`Processing token: ${token.name} | Path: ${token.tokenPath ? token.tokenPath.join(' > ') : 'N/A'}`);
+        // console.log(`Processing token: ${token.name} | Path: ${token.tokenPath ? token.tokenPath.join(' > ') : 'N/A'}`);
 
         if (!token.tokenPath || token.tokenPath.length < 1) continue;
 
@@ -129,48 +95,6 @@ function generateDartFromTree(
     return out;
 }
 
-
-function splitTokensByTopGroup(
-    tokens: ColorToken[]
-): Map<string, ColorToken[]> {
-    const map = new Map<string, ColorToken[]>();
-    for (const token of tokens) {
-        // console.log(`Processing token: ${token.name}`);
-        const root = token.tokenPath?.[0];
-        // console.log(`Root path: ${root}`);
-        if (!root) {
-            // console.log(`Token ${token.name} has no root path, skipping.`);
-            continue;
-        }
-        const key = sanitizeIdentifier(root);
-        // console.log(`Processing token key: ${key}`);
-        if (!map.has(key)) map.set(key, []);
-        map.get(key)!.push(token);
-        // console.log(`Added token ${token.name} to group ${key}`);
-        // console.log('--------------------------------------------------');
-    }
-    return map;
-}
-
-function capitalizeFirstLetter(str: string): string {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function toFileName(input: string): string {
-    return input
-        .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
-        .replace(/([A-Z])([A-Z][a-z])/g, '$1_$2')
-        .toLowerCase();
-}
-
-function ll(input: string): void {
-    const lines = input.split('\n');
-    for (const line of lines) {
-        console.log(line);
-    }
-}
-
 export function generateColors(
     groups: TokenGroup[],
     tokens: ColorToken[]
@@ -183,7 +107,7 @@ export function generateColors(
     const result: Array<{ name: string; path: string; content: string }> = [];
 
     for (const [groupKey, groupTokens] of tokenMap.entries()) {
-        const tree = buildTokenTree(groupTokens, groups);
+        const tree = buildTokenTree(groupTokens);
         const className = toPascalCase(groupKey);
         const fileName = toFileName(className);
         const body = generateDartFromTree(tree, [className]);

@@ -1,11 +1,8 @@
 import { Supernova, PulsarContext, RemoteVersionIdentifier, AnyOutputFile, TokenType, ColorToken, TypographyToken } from "@supernovaio/sdk-exporters"
 import { ExporterConfiguration } from "../config"
-import { colorTokenToCSS } from "./content/token"
 import { FileHelper } from "@supernovaio/export-helpers"
 import { generateColors } from './content/color';
 import { generateTypography } from "./content/typography";
-
-
 
 /**
  * Export entrypoint.
@@ -20,60 +17,8 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
   }
 
   // Fetch the necessary data
-  let tokens = await sdk.tokens.getTokens(remoteVersionIdentifier)
-  let tokenGroups = await sdk.tokens.getTokenGroups(remoteVersionIdentifier)
-
-  // const flatGroups: TokenGroup[] = tokenGroups.map((g: any) => ({
-  //   id: g.id,
-  //   name: g.name,
-  //   path: g.path,
-  //   parentGroupId: g.parentGroupId,
-  // }));
-
-  // const tree = buildGroupTree(flatGroups);
-  // console.log(JSON.stringify(tree, null, 2));
-
-
-  // tokenGroups.forEach((tokenGroup, index) => {
-  //   console.log(`Token Group: ${index} | ${tokenGroup}`);
-
-  //   console.log(`   id: ${tokenGroup.id}`);
-  //   console.log(`   idInVersion: ${tokenGroup.idInVersion}`);
-  //   console.log(`   brandId: ${tokenGroup.brandId}`);
-  //   console.log(`   designSystemVersionId: ${tokenGroup.designSystemVersionId}`);
-  //   console.log(`   name: ${tokenGroup.name}`);
-  //   console.log(`   description: ${tokenGroup.description}`);
-  //   console.log(`   path: ${tokenGroup.path ? tokenGroup.path.join(" > ") : "N/A"}`);
-  //   console.log(`   subgroupIds: ${tokenGroup.subgroupIds.join(", ")}`);
-  //   console.log(`   type: ${tokenGroup.tokenType}`);
-  //   console.log(`   isRoot: ${tokenGroup.isRoot}`);
-  //   console.log(`   childrenIds: ${tokenGroup.childrenIds.join(", ")}`);
-  //   console.log(`   tokenIds: ${tokenGroup.tokenIds.join(", ")}`);
-  //   console.log(`   parentGroupId: ${tokenGroup.parentGroupId}`);
-  //   console.log(`   sortOrder: ${tokenGroup.sortOrder}`);
-  //   console.log("--------------------------------------------------");
-  // });
-
-  // let types = [...new Set(tokens.map(token => token.tokenType))];
-
-  // console.log(`Unique types: ${types}`);
-
-  // tokens.forEach((token, index) => {
-
-  //   console.log(`Token: ${index} | ${token}`);
-  //   // console.log(`   id: ${token.id}`);
-  //   console.log(`   name: ${token.name}`);
-  //   console.log(`   type: ${token.tokenType}`);
-  //   // console.log(`   brandId: ${token.brandId}`);
-  //   console.log(`   groupId: ${token.parentGroupId}`);
-  //   console.log(`   path: ${token.tokenPath ? token.tokenPath.join(" > ") : "N/A"}`);
-  //   console.log(`   properties: ${token.properties.map((p) => p.name).join(", ")}`);
-  //   // console.log(`   createdAt: ${token.createdAt}`);
-  //   // console.log(`   updatedAt: ${token.updatedAt}`);
-  //   console.log("--------------------------------------------------");
-
-  // });
-  // console.log(`Size of tokens: ${tokens.length}`);
+  const tokens = await sdk.tokens.getTokens(remoteVersionIdentifier)
+  const tokenGroups = await sdk.tokens.getTokenGroups(remoteVersionIdentifier)
 
   // Filter by brand, if specified by the VSCode extension or pipeline configuration
   // if (context.brandId) {
