@@ -49,7 +49,9 @@
     {
         "key": "customKeywords",
         "type": "array",
-        "default": [],
+        "default": [
+            "azure"
+        ],
         "title": "Add custonm keyword",
         "description": "Add custonm keyword"
     }
