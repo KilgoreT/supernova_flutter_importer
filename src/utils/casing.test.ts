@@ -30,7 +30,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { toPascalCase, toSnakeCase, toCamelCase } from './casing';
+import { toPascalCase, toSnakeCase, toCamelCase } from 'src/utils/casing';
 
 describe('toPascalCase', () => {
     it('converts snake_case to PascalCase', () => {
@@ -90,6 +90,11 @@ describe('toSnakeCase', () => {
 });
 
 describe('toCamelCase', () => {
+
+    it('does not alter already camelCase strings', () => {
+        expect(toCamelCase('switchToken')).toBe('switchToken');
+    });
+
     it('converts snake_case to camelCase', () => {
         expect(toCamelCase('my_value')).toBe('myValue');
     });
@@ -103,7 +108,7 @@ describe('toCamelCase', () => {
     });
 
     it('does not preserve PascalCase', () => {
-        expect(toCamelCase('MyValue')).toBe('myvalue');
+        expect(toCamelCase('MyValue')).toBe('myValue');
     });
 
     it('handles acronyms', () => {

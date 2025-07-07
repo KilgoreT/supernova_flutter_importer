@@ -19,7 +19,7 @@ import { describe, it, expect } from 'vitest';
 import {
     sanitizeIdentifier,
     appendSuffixIfKeyword,
-} from './sanitize';
+} from 'src/utils/sanitize';
 
 describe('sanitizeIdentifier', () => {
     it('replaces special characters with underscores', () => {

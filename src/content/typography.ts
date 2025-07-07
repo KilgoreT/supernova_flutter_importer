@@ -1,13 +1,13 @@
 
-import { TokenTree } from "./index";
-import { filterTreeByTokenType } from "./index";
-import { DefinedTokenType } from "./index";
-import { NamingTarget } from "../core/types/naming_types";
-import { generateIdentifier } from "../core/naming/identifier_gen";
-import { DartRenderer } from "./dart/dart-renderer";
-import { TokenRendererRegistry } from "../core/render/token_renderer";
-import { renderTypographyToken } from "../content/dart/typography/token_renderer"
-import { generateFile } from "../core/generator"
+import { TokenTree } from "src/content/index";
+import { filterTreeByTokenType } from "src/content/index";
+import { DefinedTokenType } from "src/content/index";
+import { NamingTarget } from "src/core/types/naming_types";
+import { generateIdentifier } from "src/core/naming/identifier_gen";
+import { DartRenderer } from "src/content/dart/dart-renderer";
+import { TokenRendererRegistry } from "src/core/render/token_renderer";
+import { renderTypographyToken } from "src/content/dart/typography/typography_token_renderer"
+import { generateFile } from "src/core/generator"
 
 
 export function generateTypography(

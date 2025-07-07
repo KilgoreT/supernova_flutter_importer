@@ -1,5 +1,5 @@
-import { IToken } from "../types/core-types";
-import { DefinedTokenType, UnknownTokenType } from "../types/token-types";
+import { IToken } from "src/core/types/core-types";
+import { DefinedTokenType, UnknownTokenType } from "src/core/types/token-types";
 
 type TokenRendererFn = (token: IToken, isStaticFields: boolean, level: number) => string;
 

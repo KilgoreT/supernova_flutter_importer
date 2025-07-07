@@ -6,7 +6,9 @@
     "main": "index.js",
     "scripts": {
         "lint": "eslint . --ext .ts",
-        "test": "vitest",
+        "test": "vitest run",
+        "predev": "npm run lint && npm run test",
+        "prebuild": "npm run lint && npm run test",
         "dev": "npx webpack --mode=development --watch",
         "build": "npx webpack --mode=production"
     },

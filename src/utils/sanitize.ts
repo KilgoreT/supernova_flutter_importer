@@ -1,5 +1,4 @@
 
-
 const dartKeywords = new Set([
     "abstract", "else", "import", "super", "as", "enum", "in", "switch", "assert",
     "export", "interface", "sync", "async", "extends", "is", "this", "await",
@@ -8,7 +7,7 @@ const dartKeywords = new Set([
     "null", "var", "const", "finally", "on", "void", "continue", "for", "operator",
     "while", "covariant", "Function", "part", "with", "default", "get", "required",
     "yield", "deferred", "hide", "rethrow", "do", "if", "return", "dynamic",
-    "implements", "set", "title"
+    "implements", "set", "title", "error"
 ]);
 
 export function appendSuffixIfKeyword(

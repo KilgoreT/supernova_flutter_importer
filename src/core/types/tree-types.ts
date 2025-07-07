@@ -1,4 +1,4 @@
-import type { ITokenGroup, IToken } from "./core-types"
+import type { ITokenGroup, IToken } from "src/core/types/core-types"
 
 export type TokenTree = {
     roots: TreeNode[];

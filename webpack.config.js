@@ -15,6 +15,9 @@ export default {
         path: path.resolve(__dirname, 'dist'),
     },
     resolve: {
+        alias: {
+            src: path.resolve(__dirname, 'src'),
+        },
         extensions: ['.ts', '.js'],
     },
     module: {

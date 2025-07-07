@@ -1,6 +1,6 @@
-import type { TokenTree } from './types/tree-types';
-import { UnknownTokenType } from './types/token-types';
-import type { CoreTokenType } from './types/token-types';
+import type { TokenTree } from 'src/core/types/tree-types';
+import { UnknownTokenType } from 'src/core/types/token-types';
+import type { CoreTokenType } from 'src/core/types/token-types';
 
 export function filterTreeByTokenType(
     tree: TokenTree,

@@ -1,7 +1,7 @@
-import { CasingStyle, NamingTarget } from '../types/naming_types';
-import { NamingRuleSet, defaultNamingRules } from './naming_rules';
-import { sanitizeIdentifier, appendSuffixIfKeyword } from '../../utils/sanitize';
-import { toPascalCase, toCamelCase, toSnakeCase, capitalizeFirstLetter } from '../../utils/casing';
+import { CasingStyle, NamingTarget } from 'src/core/types/naming_types';
+import { NamingRuleSet, defaultNamingRules } from 'src/core/naming/naming_rules';
+import { sanitizeIdentifier, appendSuffixIfKeyword } from 'src/utils/sanitize';
+import { toPascalCase, toCamelCase, toSnakeCase, capitalizeFirstLetter } from 'src/utils/casing';
 
 function applyCasing(str: string, style: CasingStyle): string {
     switch (style) {

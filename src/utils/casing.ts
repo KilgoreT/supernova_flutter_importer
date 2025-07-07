@@ -20,7 +20,11 @@ export function toCamelCase(name: string): string {
         .split(/[_\-\s]/)
         .filter(Boolean)
         .map((part, index) => {
-            if (index === 0) return part.toLowerCase();
+            if (index === 0) {
+                return /^[A-Z0-9]+$/.test(part)
+                    ? part.toLowerCase()
+                    : part.charAt(0).toLowerCase() + part.slice(1);
+            }
             return part.charAt(0).toUpperCase() + part.slice(1);
         })
         .join('');

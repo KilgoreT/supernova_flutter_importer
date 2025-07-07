@@ -1,9 +1,9 @@
-import { IToken } from "../../../core/types/core-types";
-import { extractTypographyStyle } from "../../types/typography_style";
-import { generateIdentifier } from "../../../core/naming/identifier_gen";
-import { NamingTarget } from "../../../core/types/naming_types";
+import { IToken } from "src/core/types/core-types";
+import { extractTypographyStyle } from "src/content/types/typography_style";
+import { generateIdentifier } from "src/core/naming/identifier_gen";
+import { NamingTarget } from "src/core/types/naming_types";
 
-export function renderTypographyToken(token: IToken, isStaticFields: boolean = false, level: number): string {
+export function renderTypographyToken(token: IToken, isStatic: boolean = false, level: number): string {
 
     const indent = (lvl: number) => '  '.repeat(lvl);
 
@@ -41,7 +41,7 @@ export function renderTypographyToken(token: IToken, isStaticFields: boolean = f
     const styleBody = styleParts.join(',\n' + indent(level + 3));
     const fieldName = generateIdentifier(token.name, NamingTarget.Field);
 
-    if (isStaticFields) {
+    if (isStatic) {
         out += indent(level + 1) + `static final ${fieldName} = TextStyle(\n`;
     } else {
         out += indent(level + 1) + `final ${fieldName} = TextStyle(\n`;

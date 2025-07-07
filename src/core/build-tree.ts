@@ -1,5 +1,5 @@
-import type { TokenTree, TreeNode } from "./types/tree-types"
-import type { ITokenGroup, IToken } from "./types/core-types";
+import type { TokenTree, TreeNode } from "src/core/types/tree-types"
+import type { ITokenGroup, IToken } from "src/core/types/core-types";
 
 export function buildTokenTree(
     groups: ITokenGroup[],

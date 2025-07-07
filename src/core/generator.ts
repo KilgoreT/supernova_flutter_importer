@@ -1,7 +1,7 @@
-import { TreeNode } from "./types/tree-types";
-import { IRenderer } from "./render/renderer"
-import { generateIdentifier } from "./naming/identifier_gen";
-import { NamingTarget } from "./types/naming_types";
+import { TreeNode } from "src/core/types/tree-types";
+import { IRenderer } from "src/core/render/renderer"
+import { generateIdentifier } from "src/core/naming/identifier_gen";
+import { NamingTarget } from "src/core/types/naming_types";
 
 
 export function generateFile(
@@ -30,7 +30,6 @@ export function generateFile(
             NamingTarget.Class,
             className,
         );
-
         out += renderer.renderFieldReference(fieldName, childClassName, isStatic, level);
     }
 

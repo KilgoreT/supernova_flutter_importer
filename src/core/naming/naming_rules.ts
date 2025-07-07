@@ -1,4 +1,4 @@
-import { CasingStyle, NamingTarget } from "../types/naming_types";
+import { CasingStyle, NamingTarget } from "src/core/types/naming_types";
 
 
 export interface NamingRuleSet {

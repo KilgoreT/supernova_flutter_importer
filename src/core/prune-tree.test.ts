@@ -23,10 +23,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { describe, it, expect } from 'vitest';
-import { pruneTokenTree } from './prune-tree';
-import type { TokenTree, TreeNode } from './types/tree-types';
-import type { ITokenGroup, IToken } from './types/core-types';
-import { CoreTokenType, DefinedTokenType } from './types/token-types';
+import { pruneTokenTree } from 'src/core/prune-tree';
+import type { TokenTree, TreeNode } from 'src/core/types/tree-types';
+import type { ITokenGroup, IToken } from 'src/core/types/core-types';
+import { CoreTokenType, DefinedTokenType } from 'src/core/types/token-types';
 
 function mockGroup(
     id: string,

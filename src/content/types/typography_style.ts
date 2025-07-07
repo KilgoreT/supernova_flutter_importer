@@ -1,5 +1,5 @@
 import { TypographyToken } from "@supernovaio/sdk-exporters";
-import { IToken } from "../index";
+import { IToken } from "src/content/index";
 
 
 class TypographyStyle {

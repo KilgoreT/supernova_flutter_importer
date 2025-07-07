@@ -1,4 +1,4 @@
-import type { TokenTree, TreeNode } from './types/tree-types'
+import type { TokenTree, TreeNode } from 'src/core/types/tree-types'
 
 export function pruneTokenTree(tree: TokenTree): TokenTree {
     function pruneRec(node: TreeNode): TreeNode | null {

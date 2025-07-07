@@ -35,9 +35,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { describe, it, expect } from 'vitest'
-import { buildTokenTree } from './build-tree'
-import type { ITokenGroup, IToken } from './types/core-types'
-import { CoreTokenType, DefinedTokenType, UnknownTokenType } from './types/token-types'
+import { buildTokenTree } from 'src/core/build-tree'
+import type { ITokenGroup, IToken } from 'src/core/types/core-types'
+import { CoreTokenType, DefinedTokenType, UnknownTokenType } from 'src/core/types/token-types'
 
 function mockGroup(
     id: string,

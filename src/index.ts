@@ -1,10 +1,11 @@
 import { Supernova, PulsarContext, RemoteVersionIdentifier, AnyOutputFile } from "@supernovaio/sdk-exporters"
 import { ExporterConfiguration } from "../config"
 import { FileHelper } from "@supernovaio/export-helpers"
-import { generateTypography } from "./content/typography";
-import { buildTokenTree } from "./core/build-tree"
-import { toIToken, toITokenGroup } from "./core/types/core-types";
-import { pruneTokenTree } from "./core/prune-tree";
+import { generateTypography } from "src/content/typography";
+import { buildTokenTree } from "src/core/build-tree"
+import { toIToken, toITokenGroup } from "src/core/types/core-types";
+import { pruneTokenTree } from "src/core/prune-tree";
+import { generateColors } from "src/content/color";
 
 /**
  * Export entrypoint.
@@ -80,9 +81,10 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
   // const colorTokens = tokens.filter((t): t is ColorToken => t.tokenType === TokenType.color);
   // const colorFiles = generateColors(colorGroups, colorTokens);
 
+  const colorFiles = generateColors(prunedTree);
   const typographyFiles = generateTypography(prunedTree);
   const allFiles = [
-    // ...colorFiles,
+    ...colorFiles,
     ...typographyFiles,
   ];
 
