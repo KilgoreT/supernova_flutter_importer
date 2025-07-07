@@ -1,9 +1,24 @@
+/**
+ * Unit tests for utility functions `sanitizeIdentifier` and `appendSuffixIfKeyword`.
+ *
+ * Test cases:
+ *
+ * sanitizeIdentifier:
+ * - Replaces special characters with underscores.
+ * - Converts `&` into `And` with capital letter after it.
+ * - Adds `lvl` prefix if the name is purely numeric.
+ * - Leaves valid identifiers unchanged.
+ *
+ * appendSuffixIfKeyword:
+ * - Appends a suffix if the identifier is in a keyword set.
+ * - Leaves the name unchanged if it's not in the keyword set.
+ * - Supports custom keyword sets for suffix logic.
+ */
+
 import { describe, it, expect } from 'vitest';
 import {
     sanitizeIdentifier,
-    toPascalCase,
-    capitalizeFirstLetter,
-    toFileName
+    appendSuffixIfKeyword,
 } from './sanitize';
 
 describe('sanitizeIdentifier', () => {
@@ -16,77 +31,34 @@ describe('sanitizeIdentifier', () => {
         expect(sanitizeIdentifier('b&w')).toBe('bAndW');
     });
 
-    it('adds prefix if name is numeric', () => {
+    it('adds lvl prefix if name is numeric', () => {
         expect(sanitizeIdentifier('123')).toBe('lvl123');
     });
 
-    it('adds Token suffix if name is a Dart keyword', () => {
-        expect(sanitizeIdentifier('class')).toBe('classToken');
-        expect(sanitizeIdentifier('return')).toBe('returnToken');
-    });
-
-    it('does not modify valid name', () => {
+    it('does not modify valid identifier', () => {
         expect(sanitizeIdentifier('myValue')).toBe('myValue');
     });
 });
 
-describe('toPascalCase', () => {
-    it('converts snake_case to PascalCase', () => {
-        expect(toPascalCase('my_value')).toBe('MyValue');
+describe('appendSuffixIfKeyword', () => {
+    const keywords = new Set(['class', 'return', 'async']);
+
+    it('appends Token suffix if identifier is in keyword set', () => {
+        expect(appendSuffixIfKeyword('class', 'Token', keywords)).toBe('classToken');
+        expect(appendSuffixIfKeyword('return', 'Token', keywords)).toBe('returnToken');
     });
 
-    it('converts kebab-case to PascalCase', () => {
-        expect(toPascalCase('my-value')).toBe('MyValue');
+    it('does not modify if identifier is not in keyword set', () => {
+        expect(appendSuffixIfKeyword('myValue', 'Token', keywords)).toBe('myValue');
+        expect(appendSuffixIfKeyword('data_loader', 'Token', keywords)).toBe('data_loader');
     });
 
-    it('converts space-separated to PascalCase', () => {
-        expect(toPascalCase('my value here')).toBe('MyValueHere');
+    it('works with empty keyword set', () => {
+        expect(appendSuffixIfKeyword('class', 'Token', new Set())).toBe('class');
     });
 
-    it('ignores empty parts', () => {
-        expect(toPascalCase('__value--name')).toBe('ValueName');
-    });
-});
-
-
-describe('capitalizeFirstLetter', () => {
-    it('capitalizes the first letter', () => {
-        expect(capitalizeFirstLetter('hello')).toBe('Hello');
-    });
-
-    it('returns empty string for empty input', () => {
-        expect(capitalizeFirstLetter('')).toBe('');
-    });
-
-    it('returns the same string if already capitalized', () => {
-        expect(capitalizeFirstLetter('Hello')).toBe('Hello');
-    });
-
-    it('handles single character', () => {
-        expect(capitalizeFirstLetter('a')).toBe('A');
-    });
-});
-
-describe('toFileName', () => {
-    it('converts PascalCase to snake_case', () => {
-        expect(toFileName('BasicText')).toBe('basic_text');
-        expect(toFileName('VeryLongName')).toBe('very_long_name');
-    });
-
-    it('handles consecutive capitals', () => {
-        expect(toFileName('HTMLParser')).toBe('html_parser');
-        expect(toFileName('NASAData')).toBe('nasa_data');
-    });
-
-    it('handles lowerCamelCase', () => {
-        expect(toFileName('myTestCase')).toBe('my_test_case');
-    });
-
-    it('handles single word', () => {
-        expect(toFileName('Simple')).toBe('simple');
-    });
-
-    it('returns empty string for empty input', () => {
-        expect(toFileName('')).toBe('');
+    it('appends custom suffix', () => {
+        const customKeywords = new Set(['await']);
+        expect(appendSuffixIfKeyword('await', 'Key', customKeywords)).toBe('awaitKey');
     });
 });

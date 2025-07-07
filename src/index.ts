@@ -1,12 +1,9 @@
-import { Supernova, PulsarContext, RemoteVersionIdentifier, AnyOutputFile, TokenType, ColorToken, TypographyToken } from "@supernovaio/sdk-exporters"
+import { Supernova, PulsarContext, RemoteVersionIdentifier, AnyOutputFile } from "@supernovaio/sdk-exporters"
 import { ExporterConfiguration } from "../config"
 import { FileHelper } from "@supernovaio/export-helpers"
-import { generateColors } from './content/color';
 import { generateTypography } from "./content/typography";
-import { buildTokenTree, printTokenGroupTree } from "./core/build-tree"
+import { buildTokenTree } from "./core/build-tree"
 import { toIToken, toITokenGroup } from "./core/types/core-types";
-import { DefinedTokenType } from "./core/types/token-types";
-import { filterTreeByTokenType } from "./core/filter-free";
 import { pruneTokenTree } from "./core/prune-tree";
 
 /**
@@ -77,17 +74,17 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
     tokens.map(toIToken)
   );
   const prunedTree = pruneTokenTree(tree);
-  const filtered = filterTreeByTokenType(prunedTree, DefinedTokenType.Typography);
-  printTokenGroupTree(filtered);
+  // printTokenGroupTree(filtered);
 
-  const colorGroups = tokenGroups.filter(g => g.tokenType === TokenType.color);
-  const colorTokens = tokens.filter((t): t is ColorToken => t.tokenType === TokenType.color);
-  const colorFiles = generateColors(colorGroups, colorTokens);
+  // const colorGroups = tokenGroups.filter(g => g.tokenType === TokenType.color);
+  // const colorTokens = tokens.filter((t): t is ColorToken => t.tokenType === TokenType.color);
+  // const colorFiles = generateColors(colorGroups, colorTokens);
 
-  const typographicGroups = tokenGroups.filter(g => g.tokenType === TokenType.typography);
-  const typographicTokens = tokens.filter((t): t is TypographyToken => t.tokenType === TokenType.typography);
-  const typographyFiles = generateTypography(typographicGroups, typographicTokens);
-  const allFiles = [...colorFiles, ...typographyFiles];
+  const typographyFiles = generateTypography(prunedTree);
+  const allFiles = [
+    // ...colorFiles,
+    ...typographyFiles,
+  ];
 
   const wrappedFiles = allFiles.map(file => {
     let content = `\n${file.content}`;

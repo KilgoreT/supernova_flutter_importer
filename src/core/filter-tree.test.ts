@@ -32,6 +32,7 @@ function mockNode(
             name,
             parentGroupId: null,
             tokenType: type,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             raw: {} as any,
         },
         tokens: [],

@@ -1,4 +1,4 @@
-import type { TokenTree, TreeNode } from './types/tree-types';
+import type { TokenTree } from './types/tree-types';
 import { UnknownTokenType } from './types/token-types';
 import type { CoreTokenType } from './types/token-types';
 
