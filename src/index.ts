@@ -116,3 +116,9 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
 
 /** Exporter configuration. Adheres to the `ExporterConfiguration` interface and its content comes from the resolved default configuration + user overrides of various configuration keys */
 export const exportConfiguration = Pulsar.exportConfig<ExporterConfiguration>()
+
+export enum TestFormat {
+  tetest = "tetest",
+  huietest = "huietest",
+  zhopatest = "zhopatest",
+}

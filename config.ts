@@ -1,3 +1,5 @@
+import { TestFormat } from "./src";
+
 /**
  * Main configuration of the exporter - type interface.
  * Default values for it can be set through `config.json`
@@ -9,5 +11,6 @@ export type ExporterConfiguration = {
   basePath: string,
   colorPath: string,
   typographyPath: string,
-  shadowPath: string
+  shadowPath: string,
+  testFormat: TestFormat,
 }
