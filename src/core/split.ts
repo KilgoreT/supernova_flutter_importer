@@ -12,7 +12,7 @@ export function splitTokensByTopGroup<T extends Token>(
 
     for (const token of tokens) {
         const root = token.tokenPath?.[0];
-        console.log(`Root: ${root}`);
+        // console.log(`Root: ${root}`);
         if (!root) continue;
 
         const key = sanitizeIdentifier(root);

@@ -3,6 +3,11 @@ import { ExporterConfiguration } from "../config"
 import { FileHelper } from "@supernovaio/export-helpers"
 import { generateColors } from './content/color';
 import { generateTypography } from "./content/typography";
+import { buildTokenTree, printTokenGroupTree } from "./core/build-tree"
+import { toIToken, toITokenGroup } from "./core/types/core-types";
+import { DefinedTokenType } from "./core/types/token-types";
+import { filterTreeByTokenType } from "./core/filter-free";
+import { pruneTokenTree } from "./core/prune-tree";
 
 /**
  * Export entrypoint.
@@ -66,6 +71,14 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
   //     content: content,
   //   }),
   // ]
+
+  const tree = buildTokenTree(
+    tokenGroups.map(toITokenGroup),
+    tokens.map(toIToken)
+  );
+  const prunedTree = pruneTokenTree(tree);
+  const filtered = filterTreeByTokenType(prunedTree, DefinedTokenType.Typography);
+  printTokenGroupTree(filtered);
 
   const colorGroups = tokenGroups.filter(g => g.tokenType === TokenType.color);
   const colorTokens = tokens.filter((t): t is ColorToken => t.tokenType === TokenType.color);
