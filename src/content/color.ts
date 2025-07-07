@@ -7,6 +7,7 @@ import { DartRenderer } from "src/content/dart/dart-renderer";
 import { TokenRendererRegistry } from "src/core/render/token_renderer";
 import { renderColorToken } from "src/content/dart/color/color_token_renderer"
 import { generateFile } from "src/core/generator"
+import { exportConfiguration } from "..";
 
 export function generateColors(
     tree: TokenTree,
@@ -15,6 +16,8 @@ export function generateColors(
     path: string;
     content: string;
 }> {
+
+    const colorPath = exportConfiguration.colorPath;
 
     const result: Array<{ name: string; path: string; content: string }> = [];
 
@@ -39,7 +42,7 @@ export function generateColors(
             );
             result.push({
                 name: fileName,
-                path: `supernova/color`,
+                path: colorPath,
                 content: `import 'package:flutter/material.dart'; \nimport 'package:ui_kit_litnet_audio/utils/sizes.dart'; \n\n${body.trim()} `,
             });
         }

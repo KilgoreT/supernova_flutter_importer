@@ -2,7 +2,7 @@
     "name": "@KW/exporter-flutter",
     "version": "1.0.0",
     "type": "module",
-    "description": "[DESCRIPTION]",
+    "description": "Custom exporter for flutter.",
     "main": "index.js",
     "scripts": {
         "lint": "eslint . --ext .ts",
@@ -12,7 +12,7 @@
         "dev": "npx webpack --mode=development --watch",
         "build": "npx webpack --mode=production"
     },
-    "author": "[AUTHOR_NAME]",
+    "author": "apomazkin",
     "license": "MIT",
     "dependencies": {
         "@supernovaio/export-helpers": "^1.0.30",

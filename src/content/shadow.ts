@@ -6,12 +6,12 @@ import { NamingTarget } from "src/core/types/naming_types";
 import { generateIdentifier } from "src/core/naming/identifier_gen";
 import { DartRenderer } from "src/content/dart/dart-renderer";
 import { TokenRendererRegistry } from "src/core/render/token_renderer";
-import { renderTypographyToken } from "src/content/dart/typography/typography_token_renderer"
 import { generateFile } from "src/core/generator"
+import { renderShadowToken } from "./dart/shadow/shadow_token_renderer";
 import { exportConfiguration } from "..";
 
 
-export function generateTypography(
+export function generateShadow(
     tree: TokenTree,
 ): Array<{
     name: string;
@@ -20,16 +20,16 @@ export function generateTypography(
 }> {
 
     const result: Array<{ name: string; path: string; content: string }> = [];
-    const typographyPath = exportConfiguration.typographyPath;
-    const typographyTree = filterTreeByTokenType(tree, DefinedTokenType.Typography);
+    const shadowPath = exportConfiguration.shadowPath;
+    const shadowTree = filterTreeByTokenType(tree, DefinedTokenType.Shadow);
 
     const registry = new TokenRendererRegistry();
-    registry.register(DefinedTokenType.Typography, renderTypographyToken);
+    registry.register(DefinedTokenType.Shadow, renderShadowToken);
     const renderer = new DartRenderer(
         registry,
     );
 
-    for (const root of typographyTree.roots) {
+    for (const root of shadowTree.roots) {
         for (const [, startNode] of root.children) {
             const body = generateFile(
                 startNode,
@@ -42,7 +42,7 @@ export function generateTypography(
             );
             result.push({
                 name: fileName,
-                path: typographyPath,
+                path: shadowPath,
                 content: `import 'package:flutter/material.dart'; \nimport 'package:ui_kit_litnet_audio/utils/sizes.dart'; \n\n${body.trim()} `,
             });
         }

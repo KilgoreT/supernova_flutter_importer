@@ -1,3 +1,7 @@
 {
-    "generateDisclaimer": false
+    "generateDisclaimer": false,
+    "basePath": "./kw",
+    "colorPath": "/colorLocal",
+    "typographyPath": "/typographyLocal",
+    "shadowPath": "/shadowsLocal"
 }

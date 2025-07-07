@@ -6,6 +6,9 @@ import { buildTokenTree } from "src/core/build-tree"
 import { toIToken, toITokenGroup } from "src/core/types/core-types";
 import { pruneTokenTree } from "src/core/prune-tree";
 import { generateColors } from "src/content/color";
+// import { DefinedTokenType, filterTreeByTokenType } from "./content";
+// import { printTokenGroupTree } from "src/core/build-tree";
+import { generateShadow } from "./content/shadow";
 
 /**
  * Export entrypoint.
@@ -74,8 +77,12 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
     tokenGroups.map(toITokenGroup),
     tokens.map(toIToken)
   );
+
+  const basePath = exportConfiguration.basePath;
+  console.log(`>>>>> Base path: ${basePath}`);
   const prunedTree = pruneTokenTree(tree);
-  // printTokenGroupTree(filtered);
+  // const shadowed = filterTreeByTokenType(tree, DefinedTokenType.Shadow);
+  // printTokenGroupTree(shadowed);
 
   // const colorGroups = tokenGroups.filter(g => g.tokenType === TokenType.color);
   // const colorTokens = tokens.filter((t): t is ColorToken => t.tokenType === TokenType.color);
@@ -83,9 +90,11 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
 
   const colorFiles = generateColors(prunedTree);
   const typographyFiles = generateTypography(prunedTree);
+  const shadowFiles = generateShadow(prunedTree);
   const allFiles = [
     ...colorFiles,
     ...typographyFiles,
+    ...shadowFiles,
   ];
 
   const wrappedFiles = allFiles.map(file => {
@@ -96,7 +105,7 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
     }
 
     return FileHelper.createTextFile({
-      relativePath: file.path,
+      relativePath: `${basePath}${file.path}`,
       fileName: `${file.name}.dart`,
       content,
     });

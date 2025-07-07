@@ -5,5 +5,33 @@
         "default": false,
         "title": "Show Generated File Disclaimer",
         "description": "When enabled, a disclaimer showing the fact that the file was generated automatically and should not be changed manually will appear in all style styles"
+    },
+    {
+        "key": "basePath",
+        "type": "string",
+        "default": "./kw",
+        "title": "Base Path",
+        "description": "Root path used as the base for all resource folders (e.g., colors, typography) (start wirh .)."
+    },
+    {
+        "key": "colorPath",
+        "type": "string",
+        "default": "/colorsConfig",
+        "title": "Colors Path",
+        "description": "Relative path from the base path to the colors folder (start with /)."
+    },
+    {
+        "key": "typographyPath",
+        "type": "string",
+        "default": "/typographyConfig",
+        "title": "Typography Path",
+        "description": "Relative path from the base path to the typography folder (start with /)."
+    },
+    {
+        "key": "shadowPath",
+        "type": "string",
+        "default": "/shadowsConfig",
+        "title": "Typography Path",
+        "description": "Relative path from the base path to the shadows folder (start with /)."
     }
 ]
