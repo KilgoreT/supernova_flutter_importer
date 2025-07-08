@@ -8,11 +8,13 @@ import { DartRenderer } from "src/content/dart/dart-renderer";
 import { TokenRendererRegistry } from "src/core/render/token_renderer";
 import { renderTypographyToken } from "src/content/dart/typography/typography_token_renderer"
 import { generateFile } from "src/core/generator"
-import { exportConfiguration } from "..";
+import { exportConfiguration } from "src/index";
 
 
 export function generateTypography(
     tree: TokenTree,
+    keywords: Set<string>,
+    customIdentifiers: string[],
 ): Array<{
     name: string;
     path: string;
@@ -34,11 +36,15 @@ export function generateTypography(
             const body = generateFile(
                 startNode,
                 renderer,
+                keywords,
+                customIdentifiers,
                 true,
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
                 NamingTarget.File,
+                keywords,
+                customIdentifiers,
             );
             result.push({
                 name: fileName,

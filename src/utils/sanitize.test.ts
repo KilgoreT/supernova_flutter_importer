@@ -42,23 +42,24 @@ describe('sanitizeIdentifier', () => {
 
 describe('appendSuffixIfKeyword', () => {
     const keywords = new Set(['class', 'return', 'async']);
+    const customIdentifiers: string[] = [];
 
     it('appends Token suffix if identifier is in keyword set', () => {
-        expect(appendSuffixIfKeyword('class', 'Token', keywords)).toBe('classToken');
-        expect(appendSuffixIfKeyword('return', 'Token', keywords)).toBe('returnToken');
+        expect(appendSuffixIfKeyword('class', 'Token', customIdentifiers, keywords)).toBe('classToken');
+        expect(appendSuffixIfKeyword('return', 'Token', customIdentifiers, keywords)).toBe('returnToken');
     });
 
     it('does not modify if identifier is not in keyword set', () => {
-        expect(appendSuffixIfKeyword('myValue', 'Token', keywords)).toBe('myValue');
-        expect(appendSuffixIfKeyword('data_loader', 'Token', keywords)).toBe('data_loader');
+        expect(appendSuffixIfKeyword('myValue', 'Token', customIdentifiers, keywords)).toBe('myValue');
+        expect(appendSuffixIfKeyword('data_loader', 'Token', customIdentifiers, keywords)).toBe('data_loader');
     });
 
     it('works with empty keyword set', () => {
-        expect(appendSuffixIfKeyword('class', 'Token', new Set())).toBe('class');
+        expect(appendSuffixIfKeyword('class', 'Token', customIdentifiers, new Set())).toBe('class');
     });
 
     it('appends custom suffix', () => {
         const customKeywords = new Set(['await']);
-        expect(appendSuffixIfKeyword('await', 'Key', customKeywords)).toBe('awaitKey');
+        expect(appendSuffixIfKeyword('await', 'Key', customIdentifiers, customKeywords)).toBe('awaitKey');
     });
 });

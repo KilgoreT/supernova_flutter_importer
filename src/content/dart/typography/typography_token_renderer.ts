@@ -3,7 +3,13 @@ import { extractTypographyStyle } from "src/content/types/typography_style";
 import { generateIdentifier } from "src/core/naming/identifier_gen";
 import { NamingTarget } from "src/core/types/naming_types";
 
-export function renderTypographyToken(token: IToken, isStatic: boolean = false, level: number): string {
+export function renderTypographyToken(
+    token: IToken,
+    keywords: Set<string>,
+    customIdentifiers: string[],
+    level: number,
+    isStatic: boolean = false,
+): string {
 
     const indent = (lvl: number) => '  '.repeat(lvl);
 
@@ -39,7 +45,12 @@ export function renderTypographyToken(token: IToken, isStatic: boolean = false, 
     styleParts.push(`leadingDistribution: TextLeadingDistribution.even`);
 
     const styleBody = styleParts.join(',\n' + indent(level + 3));
-    const fieldName = generateIdentifier(token.name, NamingTarget.Field);
+    const fieldName = generateIdentifier(
+        token.name,
+        NamingTarget.Field,
+        keywords,
+        customIdentifiers,
+    );
 
     if (isStatic) {
         out += indent(level + 1) + `static final ${fieldName} = TextStyle(\n`;

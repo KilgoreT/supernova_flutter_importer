@@ -28,31 +28,29 @@
     {
         "key": "colorPath",
         "type": "string",
-        "default": "/colorsConfig",
+        "default": "/colors",
         "title": "Colors Path",
         "description": "Relative path from the base path to the colors folder (start with /)."
     },
     {
         "key": "typographyPath",
         "type": "string",
-        "default": "/typographyConfig",
+        "default": "/typography",
         "title": "Typography Path",
         "description": "Relative path from the base path to the typography folder (start with /)."
     },
     {
         "key": "shadowPath",
         "type": "string",
-        "default": "/shadowsConfig",
+        "default": "/shadows",
         "title": "Typography Path",
         "description": "Relative path from the base path to the shadows folder (start with /)."
     },
     {
-        "key": "customKeywords",
+        "key": "customIdentifiers",
         "type": "array",
-        "default": [
-            "azure"
-        ],
-        "title": "Add custonm keyword",
-        "description": "Add custonm keyword"
+        "default": [],
+        "title": "Add custom identifier",
+        "description": "Custom Identifier"
     }
 ]

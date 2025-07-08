@@ -16,6 +16,8 @@ function applyCasing(str: string, style: CasingStyle): string {
 export function generateIdentifier(
     input: string,
     target: NamingTarget,
+    keywords: Set<string>,
+    customIdentifiers: string[],
     prefix: string | null = null,
     suffix: string | null = null,
     rules: Record<NamingTarget, NamingRuleSet> = defaultNamingRules,
@@ -25,7 +27,7 @@ export function generateIdentifier(
 
     if (rule.sanitize) {
         base = sanitizeIdentifier(base);
-        base = appendSuffixIfKeyword(base, `Token`)
+        base = appendSuffixIfKeyword(base, `Token`, customIdentifiers, keywords)
     }
 
     let transformed = base;

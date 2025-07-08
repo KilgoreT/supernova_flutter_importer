@@ -11,6 +11,8 @@ import { exportConfiguration } from "..";
 
 export function generateColors(
     tree: TokenTree,
+    keywords: Set<string>,
+    customIdentifiers: string[],
 ): Array<{
     name: string;
     path: string;
@@ -34,11 +36,15 @@ export function generateColors(
             const body = generateFile(
                 startNode,
                 renderer,
+                keywords,
+                customIdentifiers,
                 true,
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
                 NamingTarget.File,
+                keywords,
+                customIdentifiers,
             );
             result.push({
                 name: fileName,

@@ -13,5 +13,5 @@ export type ExporterConfiguration = {
   typographyPath: string,
   shadowPath: string,
   testFormat: TestFormat,
-  customKeywords: string[],
+  customIdentifiers: string[],
 }

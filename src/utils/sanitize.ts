@@ -1,6 +1,5 @@
-import { exportConfiguration } from "..";
 
-const dartKeywords = new Set([
+export const dartKeywords = new Set([
     "abstract", "else", "import", "super", "as", "enum", "in", "switch", "assert",
     "export", "interface", "sync", "async", "extends", "is", "this", "await",
     "extension", "late", "throw", "break", "external", "library", "true", "case",
@@ -14,11 +13,10 @@ const dartKeywords = new Set([
 export function appendSuffixIfKeyword(
     name: string,
     postfix: string,
-    keywords: Set<string> = dartKeywords
+    customIdentifiers: string[],
+    keywords: Set<string> = dartKeywords,
 ): string {
-    const customKeywords = exportConfiguration.customKeywords;
-    const combined = new Set([...customKeywords, ...keywords]);
-
+    const combined = new Set([...customIdentifiers, ...keywords]);
     return combined.has(name) ? `${name}${postfix}` : name;
 }
 

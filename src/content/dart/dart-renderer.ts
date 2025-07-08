@@ -26,7 +26,13 @@ export class DartRenderer implements IRenderer {
         }
     }
 
-    renderToken(token: IToken, isStaticFields: boolean = false, level: number): string {
-        return this.registry.render(token, isStaticFields, level);
+    renderToken(
+        token: IToken,
+        keywords: Set<string>,
+        customIdentifiers: string[],
+        isStatic: boolean = false,
+        level: number,
+    ): string {
+        return this.registry.render(token, keywords, customIdentifiers, level, isStatic);
     }
 }

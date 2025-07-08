@@ -9,6 +9,7 @@ import { generateColors } from "src/content/color";
 // import { DefinedTokenType, filterTreeByTokenType } from "./content";
 // import { printTokenGroupTree } from "src/core/build-tree";
 import { generateShadow } from "./content/shadow";
+import { dartKeywords } from "./utils/sanitize";
 
 /**
  * Export entrypoint.
@@ -88,9 +89,10 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
   // const colorTokens = tokens.filter((t): t is ColorToken => t.tokenType === TokenType.color);
   // const colorFiles = generateColors(colorGroups, colorTokens);
 
-  const colorFiles = generateColors(prunedTree);
-  const typographyFiles = generateTypography(prunedTree);
-  const shadowFiles = generateShadow(prunedTree);
+  const customIdentifiers = exportConfiguration.customIdentifiers;
+  const colorFiles = generateColors(prunedTree, dartKeywords, customIdentifiers);
+  const typographyFiles = generateTypography(prunedTree, dartKeywords, customIdentifiers);
+  const shadowFiles = generateShadow(prunedTree, dartKeywords, customIdentifiers);
   const allFiles = [
     ...colorFiles,
     ...typographyFiles,

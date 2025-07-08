@@ -2,19 +2,27 @@ import { IToken } from "src/core/types/core-types";
 import { generateIdentifier } from "src/core/naming/identifier_gen";
 import { NamingTarget } from "src/core/types/naming_types";
 import { ShadowToken } from "@supernovaio/sdk-exporters";
-import { print } from "src/utils/print";
 
-
-export function renderShadowToken(token: IToken, isStatic: boolean = false, level: number): string {
+export function renderShadowToken(
+    token: IToken,
+    keywords: Set<string>,
+    customIdentifiers: string[],
+    level: number,
+    isStatic: boolean = false,
+): string {
 
     const indent = (lvl: number) => '  '.repeat(lvl);
-    const tokenName = (token.raw as ShadowToken)?.name;
     const shadowValue = (token.raw as ShadowToken)?.value;
 
     if (!shadowValue) return '';
     let out = '';
 
-    const fieldName = generateIdentifier(token.name, NamingTarget.Field);
+    const fieldName = generateIdentifier(
+        token.name,
+        NamingTarget.Field,
+        keywords,
+        customIdentifiers,
+    );
 
     const shadowArray: string[][] = [];
 
