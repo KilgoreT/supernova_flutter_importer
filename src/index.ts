@@ -3,7 +3,7 @@ import { ExporterConfiguration } from "../config"
 import { FileHelper } from "@supernovaio/export-helpers"
 import { generateTypography } from "src/content/typography";
 import { buildTokenTree } from "src/core/build-tree"
-import { toIToken, toITokenGroup } from "src/core/types/core-types";
+import { toIToken, toITokenGroup } from "src/core/entity/core";
 import { pruneTokenTree } from "src/core/prune-tree";
 import { generateColors } from "src/content/color";
 // import { DefinedTokenType, filterTreeByTokenType } from "./content";

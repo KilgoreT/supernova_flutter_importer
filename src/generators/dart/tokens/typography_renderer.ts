@@ -1,7 +1,10 @@
-import { IToken } from "src/core/types/core-types";
-import { extractTypographyStyle } from "src/content/types/typography_style";
-import { generateIdentifier } from "src/core/naming/identifier_gen";
-import { NamingTarget } from "src/core/types/naming_types";
+import {
+    IToken,
+    generateIdentifier,
+    NamingTarget,
+
+} from "src/content/index";
+import { extractTypographyStyle } from "src/content/entities/typography_style";
 
 export function renderTypographyToken(
     token: IToken,

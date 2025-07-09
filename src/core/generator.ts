@@ -1,10 +1,10 @@
-import { TreeNode } from "src/core/types/tree-types";
+import { TreeNode } from "src/core/entity/tree";
 import { IRenderer } from "src/core/render/renderer"
 import { generateIdentifier } from "src/core/naming/identifier_gen";
-import { NamingTarget } from "src/core/types/naming_types";
+import { NamingTarget } from "src/core/entity/naming";
 
 
-export function generateFile(
+export function generateFileContent(
     startNode: TreeNode,
     renderer: IRenderer,
     keywords: Set<string>,
@@ -48,7 +48,7 @@ export function generateFile(
     out += renderer.closeClass(level);
 
     for (const [, child] of startNode.children) {
-        out += generateFile(child, renderer, keywords, customIdentifiers, false, className, level);
+        out += generateFileContent(child, renderer, keywords, customIdentifiers, false, className, level);
     }
     return out;
 }

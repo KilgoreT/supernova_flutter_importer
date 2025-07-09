@@ -1,6 +1,10 @@
-import { IToken } from "src/core/types/core-types";
-import { generateIdentifier } from "src/core/naming/identifier_gen";
-import { NamingTarget } from "src/core/types/naming_types";
+import {
+    IToken,
+    generateIdentifier,
+    NamingTarget,
+
+} from "src/content";
+
 import { ShadowToken } from "@supernovaio/sdk-exporters";
 
 export function renderShadowToken(

@@ -1,7 +1,11 @@
-import { IToken } from "src/core/types/core-types";
-import { generateIdentifier } from "src/core/naming/identifier_gen";
-import { NamingTarget } from "src/core/types/naming_types";
-import { extractColorValue } from "src/content/types/color_value";
+import {
+    IToken,
+    generateIdentifier,
+    NamingTarget,
+
+} from "src/content";
+
+import { extractColorValue } from "src/content/entities/color_value";
 
 
 export function renderColorToken(

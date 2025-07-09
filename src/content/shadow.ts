@@ -1,13 +1,17 @@
 
-import { TokenTree } from "src/content/index";
-import { filterTreeByTokenType } from "src/content/index";
-import { DefinedTokenType } from "src/content/index";
-import { NamingTarget } from "src/core/types/naming_types";
-import { generateIdentifier } from "src/core/naming/identifier_gen";
-import { DartRenderer } from "src/content/dart/dart-renderer";
-import { TokenRendererRegistry } from "src/core/render/token_renderer";
-import { generateFile } from "src/core/generator"
-import { renderShadowToken } from "./dart/shadow/shadow_token_renderer";
+import {
+    TokenTree,
+    filterTreeByTokenType,
+    DefinedTokenType,
+    NamingTarget,
+    generateIdentifier,
+    TokenRendererRegistry,
+    generateFileContent,
+
+} from "src/content/index";
+
+import { DartRenderer } from "src/generators/dart/renderer";
+import { renderShadowToken } from "src/generators/dart/tokens/shadow_renderer";
 import { exportConfiguration } from "..";
 
 
@@ -33,7 +37,7 @@ export function generateShadow(
 
     for (const root of shadowTree.roots) {
         for (const [, startNode] of root.children) {
-            const body = generateFile(
+            const body = generateFileContent(
                 startNode,
                 renderer,
                 keywords,

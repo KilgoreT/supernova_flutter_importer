@@ -1,4 +1,4 @@
-import { CasingStyle, NamingTarget } from 'src/core/types/naming_types';
+import { CasingStyle, NamingTarget } from 'src/core/entity/naming';
 import { NamingRuleSet, defaultNamingRules } from 'src/core/naming/naming_rules';
 import { sanitizeIdentifier, appendSuffixIfKeyword } from 'src/utils/sanitize';
 import { toPascalCase, toCamelCase, toSnakeCase, capitalizeFirstLetter } from 'src/utils/casing';

@@ -19,8 +19,8 @@
 
 import { describe, it, expect } from 'vitest'
 import { filterTreeByTokenType } from 'src/core/filter-tree'
-import type { TokenTree, TreeNode } from 'src/core/types/tree-types'
-import { DefinedTokenType, UnknownTokenType } from 'src/core/types/token-types'
+import type { TokenTree, TreeNode } from 'src/core/entity/tree'
+import { DefinedTokenType, UnknownTokenType } from 'src/core/entity/token'
 
 function mockNode(
     name: string,

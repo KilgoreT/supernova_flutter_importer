@@ -1,6 +1,9 @@
-import { IToken } from "src/core/types/core-types";
-import { IRenderer } from "src/core/render/renderer";
-import { TokenRendererRegistry } from "src/core/render/token_renderer";
+import {
+    IToken,
+    IRenderer,
+    TokenRendererRegistry,
+
+} from "src/content/index";
 
 export class DartRenderer implements IRenderer {
 

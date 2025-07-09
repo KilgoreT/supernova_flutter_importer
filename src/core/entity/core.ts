@@ -1,5 +1,5 @@
 import { TokenGroup, Token } from "@supernovaio/sdk-exporters"
-import { CoreTokenType, mapRawTypeToCoreTokenType } from "src/core/types/token-types";
+import { CoreTokenType, mapRawTypeToCoreTokenType } from "src/core/entity/token";
 
 export interface ITokenGroup {
     id: string;

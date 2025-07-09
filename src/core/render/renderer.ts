@@ -1,4 +1,4 @@
-import { IToken } from "src/core/types/core-types";
+import { IToken } from "src/core/entity/core";
 
 export interface IRenderer {
     openClass(className: string, level: number): string;

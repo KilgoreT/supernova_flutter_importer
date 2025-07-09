@@ -1,5 +1,5 @@
 import { ColorToken } from "@supernovaio/sdk-exporters";
-import { IToken } from "src/core/types/core-types";
+import { IToken } from "src/content/index";
 
 
 function toDartColor(token: ColorToken): string | null {

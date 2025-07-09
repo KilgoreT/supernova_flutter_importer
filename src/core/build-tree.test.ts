@@ -36,8 +36,8 @@
 
 import { describe, it, expect } from 'vitest'
 import { buildTokenTree } from 'src/core/build-tree'
-import type { ITokenGroup, IToken } from 'src/core/types/core-types'
-import { CoreTokenType, DefinedTokenType, UnknownTokenType } from 'src/core/types/token-types'
+import type { ITokenGroup, IToken } from 'src/core/entity/core'
+import { CoreTokenType, DefinedTokenType, UnknownTokenType } from 'src/core/entity/token'
 
 function mockGroup(
     id: string,

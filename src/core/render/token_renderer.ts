@@ -1,5 +1,5 @@
-import { IToken } from "src/core/types/core-types";
-import { DefinedTokenType, UnknownTokenType } from "src/core/types/token-types";
+import { IToken } from "src/core/entity/core";
+import { DefinedTokenType, UnknownTokenType } from "src/core/entity/token";
 
 type TokenRendererFn = (
     token: IToken,

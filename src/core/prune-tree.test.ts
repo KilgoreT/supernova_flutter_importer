@@ -24,9 +24,9 @@
 
 import { describe, it, expect } from 'vitest';
 import { pruneTokenTree } from 'src/core/prune-tree';
-import type { TokenTree, TreeNode } from 'src/core/types/tree-types';
-import type { ITokenGroup, IToken } from 'src/core/types/core-types';
-import { CoreTokenType, DefinedTokenType } from 'src/core/types/token-types';
+import type { TokenTree, TreeNode } from 'src/core/entity/tree';
+import type { ITokenGroup, IToken } from 'src/core/entity/core';
+import { CoreTokenType, DefinedTokenType } from 'src/core/entity/token';
 
 function mockGroup(
     id: string,
