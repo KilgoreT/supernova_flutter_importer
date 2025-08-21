@@ -5,13 +5,14 @@ import {
     NamingTarget,
     generateIdentifier,
     TokenRendererRegistry,
-    generateFileContent,
+    // generateFileContent,
 
 } from "src/content/index";
 
-import { DartRenderer } from "src/generators/dart/renderer";
+// import { DartRenderer } from "src/generators/dart/renderer";
 import { renderColorToken } from "src/generators/dart/tokens/color_renderer"
 import { exportConfiguration } from "..";
+import { renderTemplate } from "src/core/render/renderer";
 
 export function generateColors(
     tree: TokenTree,
@@ -31,19 +32,28 @@ export function generateColors(
 
     const registry = new TokenRendererRegistry();
     registry.register(DefinedTokenType.Color, renderColorToken);
-    const renderer = new DartRenderer(
-        registry,
-    );
+    // const renderer = new DartRenderer(
+    //     registry,
+    // );
 
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
-            const body = generateFileContent(
-                startNode,
-                renderer,
+            // const body = generateFileContent(
+            //     startNode,
+            //     renderer,
+            //     keywords,
+            //     customIdentifiers,
+            //     true,
+            // );
+            const className = generateIdentifier(
+                startNode.tokenGroup.name,
+                NamingTarget.Class,
                 keywords,
                 customIdentifiers,
-                true,
             );
+            const body = renderTemplate('dart_class', {
+                className: className,
+            });
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
                 NamingTarget.File,

@@ -6,9 +6,9 @@
         "src/*"
       ]
     },
-    "target": "es2021",
+    "target": "ES2020",
     "outDir": "build",
-    "module": "commonjs",
+    "module": "ES2020",
     "moduleResolution": "node",
     "strictNullChecks": true,
     "typeRoots": [

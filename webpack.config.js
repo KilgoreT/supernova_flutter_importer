@@ -1,6 +1,9 @@
 // webpack.config.js (ESM)
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 /** Поддержка __dirname в ESM */
 const __filename = fileURLToPath(import.meta.url);
@@ -19,6 +22,11 @@ export default {
             src: path.resolve(__dirname, 'src'),
         },
         extensions: ['.ts', '.js'],
+        fallback: {
+            path: require.resolve('path-browserify'),
+            url: require.resolve('url/'),
+            fs: false
+        },
     },
     module: {
         rules: [

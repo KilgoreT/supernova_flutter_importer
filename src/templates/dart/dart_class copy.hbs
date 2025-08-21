@@ -1,0 +1,15 @@
+class {{className}} {
+{{className}}._();
+
+{{#fields}}
+{{#isStatic}}static {{/isStatic}}final {{name}} = {{type}}(
+{{#params}}
+{{key}}: {{value}},
+{{/params}}
+);
+{{/fields}}
+
+{{#children}}
+static final {{fieldName}} = {{className}}._();
+{{/children}}
+}
