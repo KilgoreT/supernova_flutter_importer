@@ -22,27 +22,61 @@ const getPath = () => eval('require')('path');
 // Более надежный способ определения пути к шаблонам
 const getTemplatesDir = (): string => {
     const path = getPath();
+    const fs = getFs();
     
     // Попробуем несколько возможных путей
     const possiblePaths = [
-        path.join(process.cwd(), 'src/templates/dart'),
-        path.join(__dirname || '', '../../templates/dart'),
+        // Пути для Supernova контейнера
+        '/var/task/dist/templates/dart',
+        '/var/task/templates/dart',
+        '/var/task/src/templates/dart',
+        // Пути для локальной разработки
         path.join(process.cwd(), 'dist/templates/dart'),
-        path.join(process.cwd(), 'templates/dart')
+        path.join(process.cwd(), 'src/templates/dart'),
+        path.join(process.cwd(), 'templates/dart'),
+        path.join(__dirname || '', '../../templates/dart'),
+        path.join(__dirname || '', '../templates/dart'),
     ];
     
+    console.log('🔍 Поиск директории шаблонов...');
     for (const templatePath of possiblePaths) {
-        if (getFs().existsSync(templatePath)) {
+        console.log(`  Проверяем: ${templatePath}`);
+        if (fs.existsSync(templatePath)) {
+            console.log(`  ✅ Найдена: ${templatePath}`);
             return templatePath;
         }
     }
     
+    console.log('❌ Директория шаблонов не найдена!');
+    console.log('📂 Текущая рабочая директория:', process.cwd());
+    console.log('📂 __dirname:', __dirname);
+    
     // Если ничего не найдено, вернем путь по умолчанию
-    return path.join(process.cwd(), 'src/templates/dart');
+    return '/var/task/dist/templates/dart';
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function renderTemplate(templateName: string, context: any): string {
+// Встроенные шаблоны как fallback
+const EMBEDDED_TEMPLATES = {
+    'dart_class': `{{#each classes}}
+class {{className}} {
+    {{className}}._();
+
+{{#fields}}
+{{> dart_color_field}}
+{{/fields}}
+
+{{#childReferences}}
+    static final {{fieldName}} = {{className}}._();
+{{/childReferences}}
+}
+{{#unless @last}}
+
+{{/unless}}
+{{/each}}`,
+    'dart_color_field': `    static final {{name}} = const Color({{colorValue}});`
+};
+
+export function renderTemplate(templateName: string, context: Record<string, unknown>): string {
     const path = getPath();
     const fs = getFs();
 
@@ -62,15 +96,24 @@ export function renderTemplate(templateName: string, context: any): string {
             const partialContent = fs.readFileSync(partialPath, 'utf-8');
             Handlebars.registerPartial(partialName, partialContent);
         } else {
-            console.log(`❌ Partial не найден: ${partialName}`);
+            console.log(`❌ Partial не найден: ${partialName}, используем встроенный`);
+            // Используем встроенный partial
+            if (EMBEDDED_TEMPLATES[partialName]) {
+                Handlebars.registerPartial(partialName, EMBEDDED_TEMPLATES[partialName]);
+            }
         }
     });
 
     const templatePath = path.join(templatesDir, `${templateName}.hbs`);
     console.log(`🔍 Поиск основного шаблона: ${templatePath}`);
     
-    if (!fs.existsSync(templatePath)) {
-        console.log(`❌ Шаблон не найден: ${templatePath}`);
+    let templateContent: string;
+    
+    if (fs.existsSync(templatePath)) {
+        console.log(`✅ Шаблон найден: ${templateName}`);
+        templateContent = fs.readFileSync(templatePath, 'utf-8');
+    } else {
+        console.log(`❌ Шаблон не найден: ${templatePath}, используем встроенный`);
         console.log(`📂 Содержимое директории ${templatesDir}:`);
         try {
             const files = fs.readdirSync(templatesDir);
@@ -78,11 +121,16 @@ export function renderTemplate(templateName: string, context: any): string {
         } catch (error) {
             console.log(`❌ Ошибка чтения директории: ${error}`);
         }
-        throw new Error(`Template not found: ${templatePath}`);
+        
+        // Используем встроенный шаблон
+        if (EMBEDDED_TEMPLATES[templateName]) {
+            templateContent = EMBEDDED_TEMPLATES[templateName];
+            console.log(`✅ Используем встроенный шаблон: ${templateName}`);
+        } else {
+            throw new Error(`Template not found: ${templatePath} and no embedded template available`);
+        }
     }
     
-    console.log(`✅ Шаблон найден: ${templateName}`);
-    const templateContent = fs.readFileSync(templatePath, 'utf-8');
     const template = Handlebars.compile(templateContent);
     return template(context);
 }
