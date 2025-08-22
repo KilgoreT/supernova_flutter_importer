@@ -2,6 +2,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const require = createRequire(import.meta.url);
 
@@ -17,6 +18,16 @@ export default {
         filename: 'build.js',
         path: path.resolve(__dirname, 'dist'),
     },
+    plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'src/templates'),
+                    to: path.resolve(__dirname, 'dist/templates'),
+                },
+            ],
+        }),
+    ],
     resolve: {
         alias: {
             src: path.resolve(__dirname, 'src'),
