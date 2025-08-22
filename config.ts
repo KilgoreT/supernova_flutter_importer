@@ -10,6 +10,10 @@ export type ExporterConfiguration = {
   generateDisclaimer: boolean,
   basePath: string,
   colorPath: string,
+  /** When enabled, all color tokens will be combined into a single file instead of creating separate files for each color group */
+  createUnifiedColorFile: boolean,
+  /** Name of the unified color class (will be validated and formatted according to Dart naming rules). Only used when createUnifiedColorFile is enabled */
+  unifiedColorClassName: string,
   typographyPath: string,
   shadowPath: string,
   testFormat: TestFormat,

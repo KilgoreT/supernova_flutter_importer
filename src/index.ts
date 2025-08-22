@@ -10,6 +10,7 @@ import { generateColors } from "src/content/color";
 // import { printTokenGroupTree } from "src/core/build-tree";
 import { generateShadow } from "./content/shadow";
 import { dartKeywords } from "./utils/sanitize";
+import { debugConfiguration } from "./debug-config";
 
 /**
  * Export entrypoint.
@@ -17,7 +18,7 @@ import { dartKeywords } from "./utils/sanitize";
  * Context contains information about the design system and version that is currently being exported.
  */
 Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyOutputFile>> => {
-  // Fetch data from design system that is currently being exported (context)
+  
   const remoteVersionIdentifier: RemoteVersionIdentifier = {
     designSystemId: context.dsId,
     versionId: context.versionId,
@@ -74,13 +75,28 @@ Pulsar.export(async (sdk: Supernova, context: PulsarContext): Promise<Array<AnyO
   //   }),
   // ]
 
-  const tree = buildTokenTree(
+const tree = buildTokenTree(
     tokenGroups.map(toITokenGroup),
     tokens.map(toIToken)
   );
 
   const basePath = exportConfiguration.basePath;
   console.log(`>>>>> Base path: ${basePath}`);
+  
+  // Отладочная информация о конфигурации
+  debugConfiguration();
+  console.log('=== Текущая конфигурация ===');
+  console.log('exportConfiguration:', {
+    basePath: exportConfiguration.basePath,
+    colorPath: exportConfiguration.colorPath,
+    typographyPath: exportConfiguration.typographyPath,
+    shadowPath: exportConfiguration.shadowPath,
+    generateDisclaimer: exportConfiguration.generateDisclaimer,
+    createUnifiedColorFile: exportConfiguration.createUnifiedColorFile,
+    unifiedColorClassName: exportConfiguration.unifiedColorClassName,
+    customIdentifiers: exportConfiguration.customIdentifiers
+  });
+  
   const prunedTree = pruneTokenTree(tree);
   // const shadowed = filterTreeByTokenType(tree, DefinedTokenType.Shadow);
   // printTokenGroupTree(shadowed);
@@ -122,5 +138,5 @@ export const exportConfiguration = Pulsar.exportConfig<ExporterConfiguration>()
 export enum TestFormat {
   tetest = "tetest",
   huietest = "huietest",
-  zhopatest = "zhopatest",
+  zhopatest = "zhopatest"
 }

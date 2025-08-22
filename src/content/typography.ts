@@ -13,6 +13,7 @@ import {
 import { DartRenderer } from "src/generators/dart/renderer";
 import { renderTypographyToken } from "src/generators/dart/tokens/typography_renderer"
 import { exportConfiguration } from "src/index";
+import { combineImports, TYPOGRAPHY_IMPORTS } from "src/utils/imports";
 
 
 export function generateTypography(
@@ -53,7 +54,7 @@ export function generateTypography(
             result.push({
                 name: fileName,
                 path: typographyPath,
-                content: `import 'package:flutter/material.dart'; \nimport 'package:ui_kit_litnet_audio/utils/sizes.dart'; \n\n${body.trim()} `,
+                content: `${combineImports(TYPOGRAPHY_IMPORTS)}\n\n${body.trim()}`,
             });
         }
     }

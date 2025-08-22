@@ -1,5 +1,16 @@
+{{#each classes}}
 class {{className}} {
-    
     {{className}}._();
 
+{{#fields}}
+{{> dart_color_field}}
+{{/fields}}
+
+{{#childReferences}}
+    static final {{fieldName}} = {{className}}._();
+{{/childReferences}}
 }
+{{#unless @last}}
+
+{{/unless}}
+{{/each}}

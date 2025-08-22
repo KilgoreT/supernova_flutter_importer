@@ -33,6 +33,24 @@
         "description": "Relative path from the base path to the colors folder (start with /)."
     },
     {
+        "key": "createUnifiedColorFile",
+        "type": "boolean",
+        "default": false,
+        "title": "Create Unified Color File",
+        "description": "When enabled, all color tokens will be combined into a single file instead of creating separate files for each color group"
+    },
+    {
+        "key": "unifiedColorClassName",
+        "type": "string",
+        "default": "AppColors",
+        "title": "Unified Color Class Name",
+        "description": "Name of the unified color class (will be validated and formatted according to Dart naming rules). File name will be generated automatically from the class name. Only used when 'Create Unified Color File' is enabled",
+        "condition": {
+            "key": "createUnifiedColorFile",
+            "value": true
+        }
+    },
+    {
         "key": "typographyPath",
         "type": "string",
         "default": "/typography",

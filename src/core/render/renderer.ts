@@ -33,7 +33,19 @@ export function renderTemplate(templateName: string, context: any): string {
     const path = getPath();
     const fs = getFs();
 
-    const templatePath = path.join(__dirname, '../../templates/dart', `${templateName}.hbs`);
+    const templatesDir = path.join(__dirname, '../../templates/dart');
+    
+    // Регистрируем частичные шаблоны
+    const partials = ['dart_color_field'];
+    partials.forEach(partialName => {
+        const partialPath = path.join(templatesDir, `${partialName}.hbs`);
+        if (fs.existsSync(partialPath)) {
+            const partialContent = fs.readFileSync(partialPath, 'utf-8');
+            Handlebars.registerPartial(partialName, partialContent);
+        }
+    });
+
+    const templatePath = path.join(templatesDir, `${templateName}.hbs`);
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
     const template = Handlebars.compile(templateContent);
     return template(context);

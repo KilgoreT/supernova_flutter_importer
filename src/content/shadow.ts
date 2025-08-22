@@ -13,6 +13,7 @@ import {
 import { DartRenderer } from "src/generators/dart/renderer";
 import { renderShadowToken } from "src/generators/dart/tokens/shadow_renderer";
 import { exportConfiguration } from "..";
+import { combineImports, SHADOW_IMPORTS } from "src/utils/imports";
 
 
 export function generateShadow(
@@ -53,7 +54,7 @@ export function generateShadow(
             result.push({
                 name: fileName,
                 path: shadowPath,
-                content: `import 'package:flutter/material.dart'; \nimport 'package:ui_kit_litnet_audio/utils/sizes.dart'; \n\n${body.trim()} `,
+                content: `${combineImports(SHADOW_IMPORTS)}\n\n${body.trim()}`,
             });
         }
     }
