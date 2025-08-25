@@ -15,6 +15,8 @@ function debugExportConfig(): ExporterConfiguration {
         shadowPath: "/shadows",
         createUnifiedColorFile: false, // Значение по умолчанию
         unifiedColorClassName: "colors", // Значение по умолчанию
+        useColorSuffix: false, // Значение по умолчанию
+        colorSuffix: "Color", // Значение по умолчанию
         testFormat: TestFormat.tetest,
         customIdentifiers: []
     };

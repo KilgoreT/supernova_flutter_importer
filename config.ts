@@ -14,6 +14,10 @@ export type ExporterConfiguration = {
   createUnifiedColorFile: boolean,
   /** Name of the unified color class (will be validated and formatted according to Dart naming rules). Only used when createUnifiedColorFile is enabled */
   unifiedColorClassName: string,
+  /** When enabled, color field names will have a suffix added to distinguish them as color entities */
+  useColorSuffix: boolean,
+  /** Suffix to be added to color field names (will be validated and formatted according to Dart naming rules). Only used when useColorSuffix is enabled */
+  colorSuffix: string,
   typographyPath: string,
   shadowPath: string,
   testFormat: TestFormat,

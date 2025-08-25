@@ -7,18 +7,6 @@
         "description": "When enabled, a disclaimer showing the fact that the file was generated automatically and should not be changed manually will appear in all style styles"
     },
     {
-        "key": "testFormat",
-        "type": "enum",
-        "options": [
-            "tetest",
-            "huietest",
-            "zhopatest"
-        ],
-        "default": "tetest",
-        "title": "testFormat",
-        "description": "Defines the format for testFormat."
-    },
-    {
         "key": "basePath",
         "type": "string",
         "default": "./kw",
@@ -47,6 +35,24 @@
         "description": "Name of the unified color class (will be validated and formatted according to Dart naming rules). File name will be generated automatically from the class name. Only used when 'Create Unified Color File' is enabled",
         "condition": {
             "key": "createUnifiedColorFile",
+            "value": true
+        }
+    },
+    {
+        "key": "useColorSuffix",
+        "type": "boolean",
+        "default": false,
+        "title": "Use Color Entity Suffix",
+        "description": "When enabled, color field names will have a suffix added to distinguish them as color entities"
+    },
+    {
+        "key": "colorSuffix",
+        "type": "string",
+        "default": "Clr",
+        "title": "Color Entity Suffix",
+        "description": "Suffix to be added to color field names (will be validated and formatted according to Dart naming rules). Only used when 'Use Color Entity Suffix' is enabled",
+        "condition": {
+            "key": "useColorSuffix",
             "value": true
         }
     },

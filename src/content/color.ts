@@ -60,7 +60,9 @@ function collectAllNestedClasses(
             className: string;
         }>;
     }> = [],
-    isRootClass: boolean = true
+    isRootClass: boolean = true,
+    useColorSuffix: boolean = false,
+    colorSuffix: string = ''
 ): Array<{
     className: string;
     fields: Array<{
@@ -98,6 +100,8 @@ function collectAllNestedClasses(
             NamingTarget.Field,
             keywords,
             customIdentifiers,
+            null, // prefix
+            useColorSuffix ? colorSuffix : null, // suffix
         );
 
         const colorValue = extractColorValue(token);
@@ -148,7 +152,7 @@ function collectAllNestedClasses(
 
     // Затем рекурсивно обрабатываем дочерние классы
     for (const [, child] of node.children) {
-        collectAllNestedClasses(child, keywords, customIdentifiers, className, allClasses, false);
+        collectAllNestedClasses(child, keywords, customIdentifiers, className, allClasses, false, useColorSuffix, colorSuffix);
     }
 
     return allClasses;
@@ -159,9 +163,11 @@ export function generateFileContentWithNestedClasses(
     keywords: Set<string>,
     customIdentifiers: string[],
     classPrefix: string = '',
+    useColorSuffix: boolean = false,
+    colorSuffix: string = '',
 ): string {
     // Рекурсивно собираем все классы (корневой класс = true)
-    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], true);
+    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], true, useColorSuffix, colorSuffix);
     
     // Рендерим шаблон с полным списком классов
     return renderTemplate('dart_class', {
@@ -180,6 +186,8 @@ export function generateUnifiedColors(
 }> {
     const colorPath = exportConfiguration.colorPath;
     const rootClassNameRaw = exportConfiguration.unifiedColorClassName;
+    const useColorSuffix = exportConfiguration.useColorSuffix;
+    const colorSuffix = exportConfiguration.colorSuffix;
 
     // Валидируем и форматируем название класса
     const rootClassName = generateIdentifier(
@@ -207,6 +215,9 @@ export function generateUnifiedColors(
                 startNode,
                 keywords,
                 customIdentifiers,
+                '', // classPrefix
+                useColorSuffix,
+                colorSuffix,
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
@@ -282,6 +293,8 @@ export function generateColors(
 
     // Оригинальная логика для создания отдельных файлов
     const colorPath = exportConfiguration.colorPath;
+    const useColorSuffix = exportConfiguration.useColorSuffix;
+    const colorSuffix = exportConfiguration.colorSuffix;
 
     const result: Array<{ name: string; path: string; content: string }> = [];
 
@@ -299,6 +312,9 @@ export function generateColors(
                 startNode,
                 keywords,
                 customIdentifiers,
+                '', // classPrefix
+                useColorSuffix,
+                colorSuffix,
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,

@@ -14,6 +14,8 @@ export function renderColorToken(
     customIdentifiers: string[],
     level: number,
     isStatic: boolean = false,
+    useColorSuffix: boolean = false,
+    colorSuffix: string = '',
 ): string {
 
     const indent = (lvl: number) => '  '.repeat(lvl);
@@ -27,6 +29,8 @@ export function renderColorToken(
         NamingTarget.Field,
         keywords,
         customIdentifiers,
+        null, // prefix
+        useColorSuffix ? colorSuffix : null, // suffix
     );
 
     if (isStatic) {

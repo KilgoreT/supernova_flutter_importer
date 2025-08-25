@@ -94,6 +94,8 @@ const tree = buildTokenTree(
     generateDisclaimer: exportConfiguration.generateDisclaimer,
     createUnifiedColorFile: exportConfiguration.createUnifiedColorFile,
     unifiedColorClassName: exportConfiguration.unifiedColorClassName,
+    useColorSuffix: exportConfiguration.useColorSuffix,
+    colorSuffix: exportConfiguration.colorSuffix,
     customIdentifiers: exportConfiguration.customIdentifiers
   });
   
