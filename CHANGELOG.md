@@ -1,6 +1,13 @@
 ### Release Notes
 All the updates to this exporter are documented in this file.
 
+## 1.0.4
+
+### 🔧 Changed
+
+- Исправлена ошибка TypeScript: добавлены недостающие свойства useColorSuffix и colorSuffix в конфигурацию
+- Улучшена совместимость с новыми версиями TypeScript
+
 ## 1.0.3
 
 ### 🔧 Changed
