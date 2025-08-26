@@ -1,6 +1,6 @@
 {
     "name": "@KW/exporter-flutter",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "type": "module",
     "description": "Custom exporter for flutter.",
     "main": "index.js",
