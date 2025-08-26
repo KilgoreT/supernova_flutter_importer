@@ -48,7 +48,7 @@ class NeutralOpacity {
 
 ### Единый файл с иерархией (createUnifiedColorFile = true)
 
-**AppColors.dart** (корневой файл):
+**app_colors.dart** (корневой файл только с ссылками):
 ```dart
 import 'package:flutter/material.dart';
 
@@ -61,7 +61,7 @@ class AppColors {
 }
 ```
 
-**azul.dart** (отдельный файл - генерируется как обычно):
+**azul.dart** (отдельный файл):
 ```dart
 import 'package:flutter/material.dart';
 
@@ -82,7 +82,7 @@ class AzulVariants {
 }
 ```
 
-**neutral.dart** (отдельный файл - генерируется как обычно):
+**neutral.dart** (отдельный файл):
 ```dart
 import 'package:flutter/material.dart';
 

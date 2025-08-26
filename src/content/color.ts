@@ -214,8 +214,7 @@ export function generateUnifiedColors(
     const colorTree = filterTreeByTokenType(tree, DefinedTokenType.Color);
     const result: Array<{ name: string; path: string; content: string }> = [];
 
-    // В unified mode генерируем все классы в одном файле с AppColors
-    let allClassesContent = '';
+    // СНАЧАЛА создаем отдельные файлы для каждого цветового класса (как в обычном режиме)
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
             const body = generateFileContentWithNestedClasses(
@@ -225,13 +224,23 @@ export function generateUnifiedColors(
                 '', // classPrefix
                 useColorSuffix,
                 colorSuffix,
-                true, // isUnifiedMode - в unified mode первый класс не корневой
+                false, // isUnifiedMode = false - чтобы первый класс был корневым (static поля)
             );
-            allClassesContent += body + '\n';
+            const fileName = generateIdentifier(
+                startNode.tokenGroup.name,
+                NamingTarget.File,
+                keywords,
+                customIdentifiers,
+            );
+            result.push({
+                name: fileName,
+                path: colorPath,
+                content: `${combineImports(COLOR_IMPORTS)}\n\n${body.trim()}`,
+            });
         }
     }
 
-    // Затем создаем корневой файл с ссылками на отдельные файлы
+    // ЗАТЕМ создаем корневой файл AppColors с ссылками на отдельные классы
     const rootClassFields: Array<{
         fieldName: string;
         className: string;
@@ -266,11 +275,11 @@ export function generateUnifiedColors(
 ${rootClassFields.map(field => `    static final ${field.fieldName} = ${field.className}._();`).join('\n')}
 }`;
 
-    // Добавляем корневой файл с правильным именем файла (включая все классы)
+    // Добавляем корневой файл ТОЛЬКО с классом AppColors (без других классов)
     result.push({
         name: rootFileName,
         path: colorPath,
-        content: `${combineImports(COLOR_IMPORTS)}\n\n${rootClassContent}\n\n${allClassesContent.trim()}`,
+        content: `${combineImports(COLOR_IMPORTS)}\n\n${rootClassContent}`,
     });
 
     return result;
