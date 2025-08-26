@@ -181,6 +181,116 @@ export function generateFileContentWithNestedClasses(
     });
 }
 
+// Новая функция для генерации отдельного класса без вложенных
+export function generateSingleClassContent(
+    startNode: TreeNode,
+    keywords: Set<string>,
+    customIdentifiers: string[],
+    classPrefix: string = '',
+    useColorSuffix: boolean = false,
+    colorSuffix: string = '',
+    isRootClass: boolean = true,
+): string {
+    const className = generateIdentifier(
+        startNode.tokenGroup.name,
+        NamingTarget.Class,
+        keywords,
+        customIdentifiers,
+        classPrefix,
+    );
+
+    // Генерируем поля для текущего класса
+    const fields: Array<{
+        name: string;
+        type: string;
+        params: Array<{ key: string; value: string }>;
+        isStatic: boolean;
+        colorValue?: string;
+    }> = [];
+
+    for (const token of startNode.tokens ?? []) {
+        const fieldName = generateIdentifier(
+            token.name,
+            NamingTarget.Field,
+            keywords,
+            customIdentifiers,
+            null, // prefix
+            useColorSuffix ? colorSuffix : null, // suffix
+        );
+
+        const colorValue = extractColorValue(token);
+        
+        if (colorValue) {
+            fields.push({
+                name: fieldName,
+                type: 'Color',
+                params: [],
+                isStatic: isRootClass,
+                colorValue,
+            });
+        }
+    }
+
+    // Генерируем ссылки на дочерние классы
+    const childReferences: Array<{
+        fieldName: string;
+        className: string;
+        isStatic: boolean;
+    }> = [];
+
+    for (const [, child] of startNode.children) {
+        const fieldName = generateIdentifier(
+            child.tokenGroup.name,
+            NamingTarget.Field,
+            keywords,
+            customIdentifiers,
+        );
+        const childClassName = generateIdentifier(
+            fieldName,
+            NamingTarget.Class,
+            keywords,
+            customIdentifiers,
+            className,
+        );
+        childReferences.push({
+            fieldName,
+            className: childClassName,
+            isStatic: isRootClass,
+        });
+    }
+
+    // Собираем все вложенные классы, но каждый только со своими прямыми детьми
+    const allClasses: Array<{
+        className: string;
+        fields: Array<{
+            name: string;
+            type: string;
+            params: Array<{ key: string; value: string }>;
+            isStatic: boolean;
+            colorValue?: string;
+        }>;
+        childReferences: Array<{
+            fieldName: string;
+            className: string;
+        }>;
+    }> = [];
+
+    // Добавляем основной класс
+    allClasses.push({
+        className,
+        fields,
+        childReferences,
+    });
+
+    // В отдельных файлах НЕ добавляем дочерние классы - только ссылки!
+    // Дочерние классы должны быть в своих собственных файлах
+
+    // Рендерим шаблон с полным списком классов
+    return renderTemplate('dart_class', {
+        classes: allClasses,
+    });
+}
+
 export function generateUnifiedColors(
     tree: TokenTree,
     keywords: Set<string>,
@@ -214,17 +324,17 @@ export function generateUnifiedColors(
     const colorTree = filterTreeByTokenType(tree, DefinedTokenType.Color);
     const result: Array<{ name: string; path: string; content: string }> = [];
 
-    // СНАЧАЛА создаем отдельные файлы для каждого цветового класса (как в обычном режиме)
+    // СНАЧАЛА создаем отдельные файлы для каждого цветового класса (каждый в своем файле)
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
-            const body = generateFileContentWithNestedClasses(
+            const body = generateSingleClassContent(
                 startNode,
                 keywords,
                 customIdentifiers,
                 '', // classPrefix
                 useColorSuffix,
                 colorSuffix,
-                false, // isUnifiedMode = false - чтобы первый класс был корневым (static поля)
+                true, // isRootClass = true - первый класс корневой (static поля)
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
@@ -316,14 +426,14 @@ export function generateColors(
 
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
-            const body = generateFileContentWithNestedClasses(
+            const body = generateSingleClassContent(
                 startNode,
                 keywords,
                 customIdentifiers,
                 '', // classPrefix
                 useColorSuffix,
                 colorSuffix,
-                false, // isUnifiedMode - в обычном режиме первый класс корневой
+                true, // isRootClass - в обычном режиме первый класс корневой
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
