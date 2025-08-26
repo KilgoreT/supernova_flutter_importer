@@ -28,7 +28,7 @@ class {{className}} {
 {{/fields}}
 
 {{#childReferences}}
-    static final {{fieldName}} = {{className}}._();
+    {{#isStatic}}static {{/isStatic}}final {{fieldName}} = {{className}}._();
 {{/childReferences}}
 }
 {{#unless @last}}
