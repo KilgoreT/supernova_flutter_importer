@@ -58,6 +58,7 @@ function collectAllNestedClasses(
         childReferences: Array<{
             fieldName: string;
             className: string;
+            isStatic: boolean;
         }>;
     }> = [],
     isRootClass: boolean = true,
@@ -121,6 +122,7 @@ function collectAllNestedClasses(
     const childReferences: Array<{
         fieldName: string;
         className: string;
+        isStatic: boolean;
     }> = [];
 
     for (const [, child] of node.children) {
@@ -140,6 +142,7 @@ function collectAllNestedClasses(
         childReferences.push({
             fieldName,
             className: childClassName,
+            isStatic: isRootClass, // Статичные только для корневого класса
         });
     }
 
@@ -165,9 +168,12 @@ export function generateFileContentWithNestedClasses(
     classPrefix: string = '',
     useColorSuffix: boolean = false,
     colorSuffix: string = '',
+    isUnifiedMode: boolean = false,
 ): string {
-    // Рекурсивно собираем все классы (корневой класс = true)
-    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], true, useColorSuffix, colorSuffix);
+    // Рекурсивно собираем все классы
+    // В unified mode первый класс НЕ является корневым (корневым будет AppColors)
+    const isRootClass = !isUnifiedMode;
+    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], isRootClass, useColorSuffix, colorSuffix);
     
     // Рендерим шаблон с полным списком классов
     return renderTemplate('dart_class', {
@@ -218,6 +224,7 @@ export function generateUnifiedColors(
                 '', // classPrefix
                 useColorSuffix,
                 colorSuffix,
+                true, // isUnifiedMode - в unified mode первый класс не корневой
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
@@ -316,6 +323,7 @@ export function generateColors(
                 '', // classPrefix
                 useColorSuffix,
                 colorSuffix,
+                false, // isUnifiedMode - в обычном режиме первый класс корневой
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,

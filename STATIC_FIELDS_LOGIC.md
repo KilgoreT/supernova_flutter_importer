@@ -8,56 +8,69 @@
 
 ### Примеры
 
-#### Корневой класс (уровень 0) - статические поля
+#### Если Create Unified Color File отключен:
+```dart
+class Neutral {
+    Neutral._();
+
+    static final Lvl3000 = const Color(0xFF211D1F);
+    static final Lvl2000 = const Color(0xFF312C2E);
+    // ... другие статические поля
+
+    final Opacity = NeutralOpacity._(); // НЕ статическое поле
+}
+
+class NeutralOpacity {
+    NeutralOpacity._();
+
+    final Lvl25 = const Color(0x40FAF7F9);
+    final Lvl3000 = NeutralOpacityLvl3000._(); // НЕ статическое поле
+}
+
+class NeutralOpacityLvl3000 {
+    NeutralOpacityLvl3000._();
+
+    final Lvl5 = const Color(0x0D211D1F);
+    final Lvl10 = const Color(0x1A211D1F);
+    final Lvl25 = const Color(0x40211D1F);
+}
+```
+
+#### Если Create Unified Color File включен:
 ```dart
 class AppColors {
     AppColors._();
 
     static final Green = Green._();
-    static final BAndW = BAndW._();
-    static final ErrorToken = ErrorToken._();
-    static final Purple = Purple._();
-    static final Warning = Warning._();
-    static final Secondary = Secondary._();
-    static final Red = Red._();
-    static final Primary = Primary._();
-    static final Orange = Orange._();
-    static final Success = Success._();
-    static final Azure = Azure._();
     static final Neutral = Neutral._();
-    static final Component = Component._();
-    static final Basic = Basic._();
+    // ... другие статические поля
 }
-```
 
-#### Отдельные файлы (уровень 0) - статические поля
-```dart
-class Green {
-    Green._();
+class Neutral {
+    Neutral._();
 
-    static final primary = const Color(0xFF00FF00);
-    static final secondary = const Color(0xFF00CC00);
+    final Lvl3000 = const Color(0xFF211D1F);
+    final Lvl2000 = const Color(0xFF312C2E);
+    // ... другие НЕ статические поля
+
+    final Opacity = NeutralOpacity._(); // НЕ статическое поле
 }
-```
 
-#### Вложенные классы (уровень 1+) - не статические поля
-```dart
-class GreenVariants {
-    GreenVariants._();
+class NeutralOpacity {
+    NeutralOpacity._();
 
-    final light = const Color(0xFF4DA3FF);
-    final dark = const Color(0xFF0056B3);
+    final Lvl25 = const Color(0x40FAF7F9);
+    final Lvl3000 = NeutralOpacityLvl3000._(); // НЕ статическое поле
 }
 ```
 
 ## Реализация
 
 ### Изменения в `src/content/color.ts`
-В функции `generateUnifiedColors` корневой класс (уровень 0) имеет статические поля:
-
-```typescript
-${rootClassFields.map(field => `    static final ${field.fieldName} = ${field.className}._();`).join('\n')}
-```
+1. Добавлен параметр `isUnifiedMode` в `generateFileContentWithNestedClasses`
+2. В unified mode первый класс НЕ является корневым (корневым будет AppColors)
+3. Обновлен шаблон `dart_class.hbs` для поддержки условного `static`
+4. Обновлена функция `collectAllNestedClasses` для передачи `isStatic` в `childReferences`
 
 ### Логика в других файлах
 - **`src/content/shadow.ts`** и **`src/content/typography.ts`** - используют `isStatic: true` (правильно для уровня 0)
@@ -67,3 +80,5 @@ ${rootClassFields.map(field => `    static final ${field.fieldName} = ${field.cl
 Теперь логика работает корректно:
 - Уровень 0 (корневые классы) → статические поля
 - Уровень 1+ (вложенные классы) → не статические поля
+- В unified mode AppColors - корневой, Neutral - вложенный
+- В обычном режиме Neutral - корневой
