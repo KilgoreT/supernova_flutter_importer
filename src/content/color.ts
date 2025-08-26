@@ -261,10 +261,11 @@ export function generateUnifiedColors(
     }
 
     // Генерируем корневой класс с валидированным именем
+    // Поля корневого класса НЕ статические, так как это корневой класс
     const rootClassContent = `class ${rootClassName} {
     ${rootClassName}._();
 
-${rootClassFields.map(field => `    static final ${field.fieldName} = ${field.className}._();`).join('\n')}
+${rootClassFields.map(field => `    final ${field.fieldName} = ${field.className}._();`).join('\n')}
 }`;
 
     // Добавляем корневой файл с правильным именем файла
