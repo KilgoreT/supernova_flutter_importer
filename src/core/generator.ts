@@ -48,6 +48,7 @@ export function generateFileContent(
     out += renderer.closeClass(level);
 
     for (const [, child] of startNode.children) {
+        // Дочерние классы всегда НЕстатические (правило наследования статуса)
         out += generateFileContent(child, renderer, keywords, customIdentifiers, false, className, level);
     }
     return out;

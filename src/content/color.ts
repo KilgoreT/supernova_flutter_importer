@@ -18,6 +18,23 @@ import { extractColorValue } from "src/content/entities/color_value";
 import { combineImports, COLOR_IMPORTS } from "src/utils/imports";
 
 /**
+ * Определяет статус полей согласно правилам:
+ * 1. Режим с AppColors: AppColors класс имеет статические поля, все остальные - нестатические
+ * 2. Режим без AppColors: корневые классы статические, вложенные - нестатические
+ * 3. Правило наследования: если родитель нестатический, то и дети нестатические
+ */
+function determineFieldsStaticStatus(isUnifiedMode: boolean, isRootClass: boolean): boolean {
+    if (isUnifiedMode) {
+        // В режиме AppColors только сам AppColors класс имеет статические поля
+        // Все классы, на которые он ссылается, имеют нестатические поля
+        return false;
+    } else {
+        // В режиме без AppColors корневые классы статические, вложенные - нестатические
+        return isRootClass;
+    }
+}
+
+/**
  * Пример использования новой системы шаблонов:
  * 
  * Входные данные:
@@ -63,7 +80,8 @@ function collectAllNestedClasses(
     }> = [],
     isRootClass: boolean = true,
     useColorSuffix: boolean = false,
-    colorSuffix: string = ''
+    colorSuffix: string = '',
+    isUnifiedMode: boolean = false,
 ): Array<{
     className: string;
     fields: Array<{
@@ -112,7 +130,7 @@ function collectAllNestedClasses(
                 name: fieldName,
                 type: 'Color',
                 params: [],
-                isStatic: isRootClass, // Статичные только для корневого класса
+                isStatic: determineFieldsStaticStatus(isUnifiedMode, isRootClass),
                 colorValue,
             });
         }
@@ -142,7 +160,7 @@ function collectAllNestedClasses(
         childReferences.push({
             fieldName,
             className: childClassName,
-            isStatic: isRootClass, // Статичные только для корневого класса
+            isStatic: determineFieldsStaticStatus(isUnifiedMode, isRootClass),
         });
     }
 
@@ -155,7 +173,7 @@ function collectAllNestedClasses(
 
     // Затем рекурсивно обрабатываем дочерние классы (они НЕ корневые)
     for (const [, child] of node.children) {
-        collectAllNestedClasses(child, keywords, customIdentifiers, className, allClasses, false, useColorSuffix, colorSuffix);
+        collectAllNestedClasses(child, keywords, customIdentifiers, className, allClasses, false, useColorSuffix, colorSuffix, isUnifiedMode);
     }
 
     return allClasses;
@@ -173,7 +191,7 @@ export function generateFileContentWithNestedClasses(
     // Рекурсивно собираем все классы
     // В unified mode первый класс НЕ корневой (корневым будет AppColors)
     const isRootClass = !isUnifiedMode; // В unified mode НЕ корневой, иначе корневой
-    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], isRootClass, useColorSuffix, colorSuffix);
+    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], isRootClass, useColorSuffix, colorSuffix, isUnifiedMode);
     
     // Рендерим шаблон с полным списком классов
     return renderTemplate('dart_class', {
@@ -190,6 +208,7 @@ export function generateSingleClassContent(
     useColorSuffix: boolean = false,
     colorSuffix: string = '',
     isRootClass: boolean = true,
+    isUnifiedMode: boolean = false,
 ): string {
     const className = generateIdentifier(
         startNode.tokenGroup.name,
@@ -225,7 +244,7 @@ export function generateSingleClassContent(
                 name: fieldName,
                 type: 'Color',
                 params: [],
-                isStatic: isRootClass,
+                isStatic: determineFieldsStaticStatus(isUnifiedMode, isRootClass),
                 colorValue,
             });
         }
@@ -255,7 +274,7 @@ export function generateSingleClassContent(
         childReferences.push({
             fieldName,
             className: childClassName,
-            isStatic: isRootClass,
+            isStatic: determineFieldsStaticStatus(isUnifiedMode, isRootClass),
         });
     }
 
@@ -327,14 +346,14 @@ export function generateUnifiedColors(
     // СНАЧАЛА создаем отдельные файлы для каждого цветового класса (каждый в своем файле)
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
-            const body = generateSingleClassContent(
+            const body = generateFileContentWithNestedClasses(
                 startNode,
                 keywords,
                 customIdentifiers,
                 '', // classPrefix
                 useColorSuffix,
                 colorSuffix,
-                true, // isRootClass = true - первый класс корневой (static поля)
+                true, // isUnifiedMode = true - режим с AppColors (отдельные классы НЕ корневые)
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
@@ -426,14 +445,14 @@ export function generateColors(
 
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
-            const body = generateSingleClassContent(
+            const body = generateFileContentWithNestedClasses(
                 startNode,
                 keywords,
                 customIdentifiers,
                 '', // classPrefix
                 useColorSuffix,
                 colorSuffix,
-                true, // isRootClass - в обычном режиме первый класс корневой
+                false, // isUnifiedMode = false - обычный режим без AppColors (корневые классы статические)
             );
             const fileName = generateIdentifier(
                 startNode.tokenGroup.name,
