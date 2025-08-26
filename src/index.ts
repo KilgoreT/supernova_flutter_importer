@@ -10,7 +10,7 @@ import { generateColors } from "src/content/color";
 // import { printTokenGroupTree } from "src/core/build-tree";
 import { generateShadow } from "./content/shadow";
 import { dartKeywords } from "./utils/sanitize";
-import { debugConfiguration } from "./debug-config";
+
 
 /**
  * Export entrypoint.
@@ -81,23 +81,6 @@ const tree = buildTokenTree(
   );
 
   const basePath = exportConfiguration.basePath;
-  console.log(`>>>>> Base path: ${basePath}`);
-  
-  // Отладочная информация о конфигурации
-  debugConfiguration();
-  console.log('=== Текущая конфигурация ===');
-  console.log('exportConfiguration:', {
-    basePath: exportConfiguration.basePath,
-    colorPath: exportConfiguration.colorPath,
-    typographyPath: exportConfiguration.typographyPath,
-    shadowPath: exportConfiguration.shadowPath,
-    generateDisclaimer: exportConfiguration.generateDisclaimer,
-    createUnifiedColorFile: exportConfiguration.createUnifiedColorFile,
-    unifiedColorClassName: exportConfiguration.unifiedColorClassName,
-    useColorSuffix: exportConfiguration.useColorSuffix,
-    colorSuffix: exportConfiguration.colorSuffix,
-    customIdentifiers: exportConfiguration.customIdentifiers
-  });
   
   const prunedTree = pruneTokenTree(tree);
   // const shadowed = filterTreeByTokenType(tree, DefinedTokenType.Shadow);
