@@ -171,8 +171,8 @@ export function generateFileContentWithNestedClasses(
     isUnifiedMode: boolean = false,
 ): string {
     // Рекурсивно собираем все классы
-    // В unified mode первый класс НЕ является корневым (корневым будет AppColors)
-    const level = isUnifiedMode ? 1 : 0; // В unified mode первый класс уровень 1, иначе уровень 0
+    // В unified mode классы создаются в отдельных файлах, поэтому они корневые (уровень 0)
+    const level = 0; // Всегда уровень 0, так как это отдельные файлы
     const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], level, useColorSuffix, colorSuffix);
     
     // Рендерим шаблон с полным списком классов
