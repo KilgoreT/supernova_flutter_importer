@@ -61,7 +61,7 @@ function collectAllNestedClasses(
             isStatic: boolean;
         }>;
     }> = [],
-    isRootClass: boolean = true,
+    level: number = 0,
     useColorSuffix: boolean = false,
     colorSuffix: string = ''
 ): Array<{
@@ -112,7 +112,7 @@ function collectAllNestedClasses(
                 name: fieldName,
                 type: 'Color',
                 params: [],
-                isStatic: isRootClass, // Статичные только для корневого класса (уровень 0)
+                isStatic: level === 0, // Статичные только для уровня 0 (корневого класса)
                 colorValue,
             });
         }
@@ -142,7 +142,7 @@ function collectAllNestedClasses(
         childReferences.push({
             fieldName,
             className: childClassName,
-            isStatic: isRootClass, // Статичные только для корневого класса
+            isStatic: level === 0, // Статичные только для уровня 0 (корневого класса)
         });
     }
 
@@ -155,7 +155,7 @@ function collectAllNestedClasses(
 
     // Затем рекурсивно обрабатываем дочерние классы
     for (const [, child] of node.children) {
-        collectAllNestedClasses(child, keywords, customIdentifiers, className, allClasses, false, useColorSuffix, colorSuffix);
+        collectAllNestedClasses(child, keywords, customIdentifiers, className, allClasses, level + 1, useColorSuffix, colorSuffix);
     }
 
     return allClasses;
@@ -172,8 +172,8 @@ export function generateFileContentWithNestedClasses(
 ): string {
     // Рекурсивно собираем все классы
     // В unified mode первый класс НЕ является корневым (корневым будет AppColors)
-    const isRootClass = !isUnifiedMode;
-    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], isRootClass, useColorSuffix, colorSuffix);
+    const level = isUnifiedMode ? 1 : 0; // В unified mode первый класс уровень 1, иначе уровень 0
+    const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], level, useColorSuffix, colorSuffix);
     
     // Рендерим шаблон с полным списком классов
     return renderTemplate('dart_class', {
