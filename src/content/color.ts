@@ -171,8 +171,8 @@ export function generateFileContentWithNestedClasses(
     isUnifiedMode: boolean = false,
 ): string {
     // Рекурсивно собираем все классы
-    // В unified mode классы создаются в отдельных файлах, поэтому они корневые (уровень 0)
-    const level = 0; // Всегда уровень 0, так как это отдельные файлы
+    // В unified mode первый класс НЕ корневой (корневым будет AppColors)
+    const level = isUnifiedMode ? 1 : 0; // В unified mode уровень 1, иначе уровень 0
     const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, classPrefix, [], level, useColorSuffix, colorSuffix);
     
     // Рендерим шаблон с полным списком классов
@@ -214,7 +214,8 @@ export function generateUnifiedColors(
     const colorTree = filterTreeByTokenType(tree, DefinedTokenType.Color);
     const result: Array<{ name: string; path: string; content: string }> = [];
 
-    // Сначала генерируем отдельные файлы как обычно
+    // В unified mode генерируем все классы в одном файле с AppColors
+    let allClassesContent = '';
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
             const body = generateFileContentWithNestedClasses(
@@ -226,17 +227,7 @@ export function generateUnifiedColors(
                 colorSuffix,
                 true, // isUnifiedMode - в unified mode первый класс не корневой
             );
-            const fileName = generateIdentifier(
-                startNode.tokenGroup.name,
-                NamingTarget.File,
-                keywords,
-                customIdentifiers,
-            );
-            result.push({
-                name: fileName,
-                path: colorPath,
-                content: `${combineImports(COLOR_IMPORTS)}\n\n${body.trim()}`,
-            });
+            allClassesContent += body + '\n';
         }
     }
 
@@ -275,11 +266,11 @@ export function generateUnifiedColors(
 ${rootClassFields.map(field => `    static final ${field.fieldName} = ${field.className}._();`).join('\n')}
 }`;
 
-    // Добавляем корневой файл с правильным именем файла
+    // Добавляем корневой файл с правильным именем файла (включая все классы)
     result.push({
         name: rootFileName,
         path: colorPath,
-        content: `${combineImports(COLOR_IMPORTS)}\n\n${rootClassContent}`,
+        content: `${combineImports(COLOR_IMPORTS)}\n\n${rootClassContent}\n\n${allClassesContent.trim()}`,
     });
 
     return result;
