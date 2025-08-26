@@ -112,7 +112,7 @@ function collectAllNestedClasses(
                 name: fieldName,
                 type: 'Color',
                 params: [],
-                isStatic: isRootClass, // Статичные только для корневого класса
+                isStatic: isRootClass, // Статичные только для корневого класса (уровень 0)
                 colorValue,
             });
         }
