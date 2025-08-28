@@ -140,3 +140,4 @@ out
 build/
 DerivedData/
 .build
+.cursor/
