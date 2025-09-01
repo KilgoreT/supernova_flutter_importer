@@ -8,7 +8,7 @@ import {
 
 } from "src/content/index";
 import { exportConfiguration } from "..";
-import { renderTemplate } from "src/core/render/renderer";
+import * as Handlebars from 'handlebars';
 import { TreeNode } from "src/core/entity/tree";
 import { extractColorValue } from "src/content/entities/color_value";
 import { combineImports, COLOR_IMPORTS } from "src/utils/imports";
@@ -271,7 +271,11 @@ export function generateBaseHierarchy(
                 false, // isUnifiedMode = false
             );
             
-            const body = renderTemplate(templateBaseClass(), {
+            // Регистрируем частичный шаблон для полей цвета
+            Handlebars.registerPartial('dart_color_field', `    {{#isStatic}}static {{/isStatic}}final {{name}} = const Color(0x{{colorValue}});`);
+            
+            const template = Handlebars.compile(templateBaseClass());
+            const body = template({
                 classes: allClasses,
             });
             
@@ -315,7 +319,11 @@ function generateUnifiedRootGroups(
             const allClasses = collectAllNestedClasses(startNode, keywords, customIdentifiers, masterClassName, [], isRootClass, useColorSuffix, colorSuffix, true);
             
             // Рендерим шаблон с полным списком классов
-            const body = renderTemplate(templateBaseClass(), {
+            // Регистрируем частичный шаблон для полей цвета
+            Handlebars.registerPartial('dart_color_field', `    {{#isStatic}}static {{/isStatic}}final {{name}} = const Color(0x{{colorValue}});`);
+            
+            const template = Handlebars.compile(templateBaseClass());
+            const body = template({
                 classes: allClasses,
             });
             const fileName = generateIdentifier(
