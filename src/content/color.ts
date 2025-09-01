@@ -415,8 +415,9 @@ function generateMasterClass(
             });
             
             // Добавляем импорт для корневой группы
+            const basePath = exportConfiguration.basePath.replace('./', '');
             rootGroupImports.push(
-                `import 'package:ui_kit_litnet_audio${colorPath}/${fileName}.dart';`
+                `import 'package:ui_kit_litnet_audio/${basePath}${colorPath}/${fileName}.dart';`
             );
         }
     }
