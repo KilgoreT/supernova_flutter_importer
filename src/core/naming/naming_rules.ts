@@ -16,7 +16,7 @@ export const defaultNamingRules: Record<NamingTarget, NamingRuleSet> = {
     [NamingTarget.Field]: {
         target: NamingTarget.Field,
         casings: [
-            CasingStyle.CamelCase,
+            CasingStyle.PascalCase,
         ],
         sanitize: true,
     },
