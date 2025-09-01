@@ -383,6 +383,9 @@ function generateMasterClass(
         fieldName: string;
         className: string;
     }> = [];
+    
+    // Генерируем импорты для корневых групп
+    const rootGroupImports: string[] = [];
 
     for (const root of colorTree.roots) {
         for (const [, startNode] of root.children) {
@@ -399,20 +402,35 @@ function generateMasterClass(
                 customIdentifiers,
                 masterClassName, // префикс Master Class (например, AppColors)
             );
+            const fileName = generateIdentifier(
+                startNode.tokenGroup.name,
+                NamingTarget.File,
+                keywords,
+                customIdentifiers,
+            );
+            
             rootClassFields.push({
                 fieldName,
                 className,
             });
+            
+            // Добавляем импорт для корневой группы
+            rootGroupImports.push(
+                `import 'package:ui_kit_litnet_audio${colorPath}/${fileName}.dart';`
+            );
         }
     }
 
     // Генерируем Master Class с валидированным именем
     // Поля Master Class - статические
     const masterClassContent = templateMasterClass(masterClassName, rootClassFields);
+    
+    // Объединяем базовые импорты с импортами корневых групп
+    const allImports = [...COLOR_IMPORTS, ...rootGroupImports];
 
     return {
         name: masterFileName,
         path: colorPath,
-        content: `${combineImports(COLOR_IMPORTS)}\n\n${masterClassContent}`,
+        content: `${combineImports(allImports)}\n\n${masterClassContent}`,
     };
 }
