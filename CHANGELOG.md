@@ -1,6 +1,19 @@
 ### Release Notes
 All the updates to this exporter are documented in this file.
 
+## 1.0.20
+
+### 🔧 Changed
+
+- Изменено именование полей с PascalCase обратно на camelCase
+- Поля теперь генерируются в формате `myFieldName` вместо `MyFieldName`
+- Имена классов остаются в PascalCase без изменений
+
+### 📋 Technical Notes
+
+- Изменен файл `src/core/naming/naming_rules.ts`
+- Обновлены правила именования для `NamingTarget.Field` с `CasingStyle.PascalCase` на `CasingStyle.CamelCase`
+
 ## 1.0.19
 
 ### 🐛 Fixed
