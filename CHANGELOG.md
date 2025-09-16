@@ -1,6 +1,18 @@
 ### Release Notes
 All the updates to this exporter are documented in this file.
 
+## 1.0.21
+
+### 🔧 Changed
+
+- Исправлена синтаксическая ошибка в функции applyCasing (отсутствовала точка с запятой)
+- Улучшена стабильность генерации имен полей в camelCase
+
+### 📋 Technical Notes
+
+- Исправлен файл `src/core/naming/identifier_gen.ts`
+- Добавлена недостающая точка с запятой в case CasingStyle.CapitalizeFirstCase
+
 ## 1.0.20
 
 ### 🔧 Changed
